@@ -2,20 +2,28 @@
   <div class="app">
     <div class="todo-list container">
       <Header :list-change="changeListType" />
-      <NewTask />
-      <TaskList :list="selectedList" />
+      <NewTaskInput "/>
+      <TaskList :list="selectedList" :taskList="taskList" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
 
 const selectedList = ref('tasks');
+
+const taskList = [];
 
 function changeListType(val) { 
   selectedList.value = val;
 }
+
+function updateTaskList(val) { 
+  taskList.push({ name: val })
+} 
+
+
 </script>
 
 <style scoped>
@@ -35,5 +43,6 @@ function changeListType(val) {
     gap: 5px;
     border-radius: 30px;
     padding: 20px;
+    background-color: var(--offwhite);
   }
 </style>

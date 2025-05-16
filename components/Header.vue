@@ -46,6 +46,9 @@ header {
 .menu-button {
   width: 75px;
   height: 25px;
+  background-color: var(--mainwhite);
+  border: 0.5px solid black;
+  border-radius: 5px;
 }
 .menu-button.active {
   font-weight: bold;

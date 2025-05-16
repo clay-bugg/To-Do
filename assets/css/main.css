@@ -27,10 +27,20 @@ body {
   min-height: 100vh;
 }
 
+button:hover {
+  cursor: pointer;
+  filter: brightness(95%);
+}
+
+input[type="text"] {
+  cursor: text;
+}
+
 .container {
   border: 1px solid black;
   border-radius: 5px;
   width: 100%;
+  background-color: var(--mainwhite);
   
 }
 
