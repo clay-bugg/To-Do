@@ -1,23 +1,31 @@
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
-export const useTaskStore = defineStore('task', {
-  state: () => ({
-    tasks: [] as { name: string }[],
-    completedTasks: [] as { name: string }[]
-  }),
+let nextId = 1;
 
-  actions: {
-    addTask(name: string) {
-      if (!name) return;
-      this.tasks.push({ name });
-    },
-    completeTask(name: string) { 
-      if (!name) return;
+export const useTaskStore = defineStore('task', () => {
 
-      const i = this.tasks.findIndex(task => task.name === name);
-      if (i === -1) return;
-      const [task] = this.tasks.splice(i, 1);
-      this.completedTasks.push(task);
-    }
-  },
+  const tasks = ref<{ id: number; name: string }[]>([]);
+  const completedTasks = ref<{ id: number; name: string }[]>([]);
+  
+  function addTask(name: string) { 
+    if (!name) return;
+    tasks.value.push({ id: nextId++, name });
+  }
+  function completeTask(name: string) { 
+    if (!name) return;
+
+    const i = tasks.value.findIndex(task => task.name === name);
+    if (i === -1) return;
+
+    const [task] = tasks.value.splice(i, 1);
+    completedTasks.value.push(task);
+  }
+
+  return {
+    tasks,
+    completedTasks,
+    addTask,
+    completeTask
+  }
 });

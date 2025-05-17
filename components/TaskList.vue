@@ -1,7 +1,7 @@
 <template>
   <div v-if="listStore.selectedListType === 'tasks'" class="task-list container"> 
     <ul class="item-list">
-      <li v-for="(task, index) in taskStore.tasks" :key="index" class="list-item-box">
+      <li v-for="(task, index) in taskStore.tasks" :key="index" class="list-item-box" >
 
         <div class="list-item">
           <input type="checkbox" v-model="isChecked" :class="`checkbox-${ task.index }`" :checked="false" />
@@ -12,7 +12,6 @@
           <button class="list-item-button edit-button">edit</button>
           <button class="list-item-button delete-button">delete</button>
         </div>
-
       </li>
     </ul>
   </div>
@@ -20,7 +19,7 @@
   <div v-else-if="listStore.selectedListType === 'completed'" class="task-list container">
     <div v-for="(task, index) in completedListItems" :key="index" class="list-item-box">
       <div class="list-item">
-          <input type="checkbox" v-model="isChecked" :class="`checkbox-${ task.index }`" :checked="false" />
+          <input type="checkbox" v-model="isChecked" :id="task.id" :checked="false" />
           {{ task.name }}
         </div>
     </div>
@@ -28,14 +27,13 @@
 </template>
 
 <script setup>
-
+import { watch } from 'vue';
 import { useListTypeStore } from '@/stores/listTypeStore';
 import { useTaskStore } from '@/stores/taskStore';
 
 const taskStore = useTaskStore();
 const listStore = useListTypeStore();
 
-const selectedList = listStore.selectedListType;
 
 </script>
 
