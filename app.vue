@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <div class="todo-list container">
-      <Header :list-change="changeListType" />
+      <MenuButtons :list-change="changeListType" />
       <NewTaskInput "/>
       <TaskList :list="selectedList" :taskList="taskList" />
     </div>
@@ -35,14 +35,14 @@ function updateTaskList(val) {
   justify-content: center;
 }
 .todo-list {
-    height: 500px;
-    width: 350px;
+    height: 700px;
+    width: 550px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    border-radius: 30px;
-    padding: 20px;
+    gap: 16px;
+    border-radius: 15px;
+    padding: 35px;
     background-color: var(--offwhite);
   }
 </style>

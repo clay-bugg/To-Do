@@ -44,7 +44,7 @@ onUnmounted(() => {
   height: 30px;
   position: relative;
   cursor: text;
-  height: 40px;
+  height: 52px;
 }
 .new-task-input {
   appearance: none;
@@ -53,27 +53,34 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   border: none;
-  padding: 0 5px;
+  padding: 0 15px;
   cursor: text;
-  border-radius: 5px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
 }
 .new-task-input:focus {
   outline: none;
 } 
 .new-task-input::placeholder {
-  font-style: italic;
+  color: var(--placeholdergrey);
+  font-weight: 150;
 } 
 .new-task-button {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
-  height: 21px;
-  width: 21px;
+  height: 27px;
+  width: 27px;
   background-color: var(--maingrey);
   color: var(--offwhite);
   position: absolute;
-  right: 4px;
+  right: 8px;
   border-radius: 5px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 </style>

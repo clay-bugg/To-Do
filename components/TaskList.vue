@@ -1,7 +1,7 @@
 <template>
   <div class="task-list container"> 
     <ul v-if="listStore.selectedListType === 'tasks'" class="item-list">
-      <li v-for="(task, index) in taskStore.tasks" :key="task.id" class="list-item-box" >
+      <li v-for="(task, index) in taskStore.tasks" :key="task.id" class="list-item-box container" >
         <div class="list-item">
           <button class="checkbox" @click="completeTask(task.id)"></button>
           {{ task.name }}
@@ -9,10 +9,11 @@
 
         <div class="list-item-buttons">
           <button class="list-item-button edit-button">edit</button>
-          <button class="list-item-button delete-button">delete</button>
+          <button class="list-item-button delete-button" @click="deleteTask(task.id)"></button>
         </div>
       </li>
     </ul>
+
     <ul v-else-if="listStore.selectedListType === 'completed'" class="item-list">
       <li v-for="(task, index) in taskStore.completedTasks" :key="task.id" class="list-item-box" >
         <div class="list-item">
@@ -35,14 +36,14 @@ import { useTaskStore } from '@/stores/taskStore';
 
 const taskStore = useTaskStore();
 const listStore = useListTypeStore();
-
 const { completeTask } = taskStore;
+const { deleteTask } = taskStore;
 </script>
 
 <style scoped>
 .task-list {
   width: 100%;
-  padding: 30px 10px;
+  padding: 25px;
   height: 100%;
 }
 .item-list {
@@ -52,6 +53,7 @@ const { completeTask } = taskStore;
   justify-content: flex-start;
   align-items: flex-start;
   height: 100%;
+  gap: 20px;
 }
 .list-item-box {
   display: flex;
@@ -59,13 +61,24 @@ const { completeTask } = taskStore;
   align-items: center;
   width: 100%;
   gap: 2px;
-  height: 30px;
+  height: 50px;
+  padding: 10px;
 }
 .list-item {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
+  width: fit-content;
   gap: 10px;
+  font-size: 0.8rem;
+}
+.list-item-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: fit-content;
+  gap: 5px;
+  height: 100%;
 }
 .checkbox {
   width: 20px;
@@ -73,4 +86,10 @@ const { completeTask } = taskStore;
   border-radius: 50px;
   background-color: var(--mainwhite);
 }
+.list-item-button {
+  height: 20px;
+  width: 20px;
+}
+
+
 </style>
