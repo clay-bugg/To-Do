@@ -1,45 +1,41 @@
 <template>
-  <div v-if="selectedList === tasks" class="task-list container"> 
-
+  <div v-if="listStore.selectedListType === 'tasks'" class="task-list container"> 
     <ul class="item-list">
       <li v-for="(task, index) in taskStore.tasks" :key="index" class="list-item-box">
+
         <div class="list-item">
           <input type="checkbox" v-model="isChecked" :class="`checkbox-${ task.index }`" :checked="false" />
           {{ task.name }}
         </div>
-        <div class="list-item-buttons">
 
+        <div class="list-item-buttons">
           <button class="list-item-button edit-button">edit</button>
           <button class="list-item-button delete-button">delete</button>
-
         </div>
+
       </li>
     </ul>
   </div>
 
-  <div v-else-if="selectedList === 'completed'" class="task-list container">
-    <div v-for="(listItem, index) in completedLisdtItems" :key="index">
-      <div class="completed list-item">
-      </div>
+  <div v-else-if="listStore.selectedListType === 'completed'" class="task-list container">
+    <div v-for="(task, index) in completedListItems" :key="index" class="list-item-box">
+      <div class="list-item">
+          <input type="checkbox" v-model="isChecked" :class="`checkbox-${ task.index }`" :checked="false" />
+          {{ task.name }}
+        </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
 
-import { useTaskStore } from '@/stores/taskStore'
+import { useListTypeStore } from '@/stores/listTypeStore';
+import { useTaskStore } from '@/stores/taskStore';
 
-const taskStore = useTaskStore()
+const taskStore = useTaskStore();
+const listStore = useListTypeStore();
 
-const props = defineProps({
-  listType: {
-    type: String,
-    required: true
-  }
-})
-
-const selectedList = ref(props.listType);
+const selectedList = listStore.selectedListType;
 
 </script>
 

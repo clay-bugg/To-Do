@@ -4,24 +4,16 @@
       <h1>To-Do List</h1>
     </div>
     <div class ="menu-buttons">
-      <button :class="['menu-button', { active: selectedList === 'tasks' }]" @click="select('tasks')">Tasks</button>
-      <button :class="['menu-button', { active: selectedList === 'completed' }]" @click="select('completed')">Completed</button>
+      <button :class="['menu-button', { active: store.selectedListType === 'tasks' }]" @click="store.select('tasks')">Tasks</button>
+      <button :class="['menu-button', { active: store.selectedListType === 'completed' }]" @click="store.select('completed')">Completed</button>
     </div>
 </header>
 </template>
 
 <script setup>
-import { ref, defineEmits, watch } from 'vue';
+import { useListTypeStore } from '@/stores/listTypeStore';
 
-const selectedList = ref('');
-
-const emit = defineEmits(['list-change']);
-
-function select(list) { 
-  if (selectedList === list) return;
-  selectedList.value = list;
-  emit('list-change', list)
-}
+const store = useListTypeStore(); 
 
 </script>
 

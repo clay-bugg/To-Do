@@ -24,7 +24,7 @@ function add() {
   if (!newTask.value) return;
     taskStore.addTask(newTask.value);
     newTask.value = '';
-    console.log(taskStore.tasks)
+    console.log(taskStore.tasks);
   }
 
 onMounted(() => { 
