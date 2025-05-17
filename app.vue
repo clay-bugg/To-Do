@@ -15,13 +15,15 @@ const selectedList = ref('tasks');
 
 const taskList = [];
 
+
+
 function changeListType(val) { 
   selectedList.value = val;
 }
 
 function updateTaskList(val) { 
   taskList.push({ name: val })
-} 
+}
 
 
 </script>

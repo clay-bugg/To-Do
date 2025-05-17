@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 import { useTaskStore } from '@/stores/taskStore'
 
@@ -14,12 +14,26 @@ const taskStore = useTaskStore();
 
 const newTask = ref('');
 
+function enterPressed(e) { 
+  if (e.key === 'Enter') { 
+    add()
+  }
+}
+
 function add() {
   if (!newTask.value) return;
-  taskStore.addTask(newTask.value);
-  newTask.value = '';
-  console.log(taskStore.tasks)
-}
+    taskStore.addTask(newTask.value);
+    newTask.value = '';
+    console.log(taskStore.tasks)
+  }
+
+onMounted(() => { 
+  window.addEventListener('keydown', enterPressed);
+})
+
+onUnmounted(() => { 
+  window.removeEventListener('keydown', enterPressed);
+})
   
 </script>
 
@@ -30,7 +44,7 @@ function add() {
   height: 30px;
   position: relative;
   cursor: text;
-  
+  height: 40px;
 }
 .new-task-input {
   appearance: none;
@@ -53,12 +67,12 @@ function add() {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
-  height: 20px;
-  width: 20px;
+  height: 21px;
+  width: 21px;
   background-color: var(--maingrey);
   color: var(--offwhite);
   position: absolute;
-  right: 5px;
+  right: 4px;
   border-radius: 5px;
 }
 

@@ -1,11 +1,12 @@
 <template>
   <div v-if="selectedList === tasks" class="task-list container"> 
-    
-    <ul class="item-list">
-      <li v-for="(task, index) in taskStore.tasks" :key="index" class="list-item">
 
-        <input type="checkbox" v-model="isChecked" :checked="false" />
-        {{ task.name }}
+    <ul class="item-list">
+      <li v-for="(task, index) in taskStore.tasks" :key="index" class="list-item-box">
+        <div class="list-item">
+          <input type="checkbox" v-model="isChecked" :class="`checkbox-${ task.index }`" :checked="false" />
+          {{ task.name }}
+        </div>
         <div class="list-item-buttons">
 
           <button class="list-item-button edit-button">edit</button>
@@ -31,8 +32,6 @@ import { useTaskStore } from '@/stores/taskStore'
 
 const taskStore = useTaskStore()
 
-
-
 const props = defineProps({
   listType: {
     type: String,
@@ -42,28 +41,34 @@ const props = defineProps({
 
 const selectedList = ref(props.listType);
 
-const listItems = ref([]);
 </script>
 
 <style scoped>
 .task-list {
   width: 100%;
-  padding: 20px;
+  padding: 30px 10px;
   height: 100%;
 }
 .item-list {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   height: 100%;
 }
-.list-item,
-.list-item-buttons {
+.list-item-box {
   display: flex;
   justify-content: space-between;
-  width: fit-content;
+  align-items: center;
+  width: 100%;
   gap: 2px;
+  height: 30px;
+}
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
 }
 </style>
