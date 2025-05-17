@@ -2,9 +2,8 @@
   <div v-if="listStore.selectedListType === 'tasks'" class="task-list container"> 
     <ul class="item-list">
       <li v-for="(task, index) in taskStore.tasks" :key="index" class="list-item-box" >
-
         <div class="list-item">
-          <input type="checkbox" v-model="isChecked" :class="`checkbox-${ task.index }`" :checked="false" />
+          <button class="checkbox"></button>
           {{ task.name }}
         </div>
 
@@ -15,15 +14,6 @@
       </li>
     </ul>
   </div>
-
-  <div v-else-if="listStore.selectedListType === 'completed'" class="task-list container">
-    <div v-for="(task, index) in completedListItems" :key="index" class="list-item-box">
-      <div class="list-item">
-          <input type="checkbox" v-model="isChecked" :id="task.id" :checked="false" />
-          {{ task.name }}
-        </div>
-    </div>
-  </div>
 </template>
 
 <script setup>
@@ -33,6 +23,10 @@ import { useTaskStore } from '@/stores/taskStore';
 
 const taskStore = useTaskStore();
 const listStore = useListTypeStore();
+
+function isChecked(id) { 
+  console.log(id)
+}
 
 
 </script>
@@ -64,5 +58,11 @@ const listStore = useListTypeStore();
   align-items: center;
   justify-content: flex-start;
   gap: 10px;
+}
+.checkbox {
+  width: 20px;
+  height: 20px;
+  border-radius: 50px;
+  background-color: var(--mainwhite);
 }
 </style>
