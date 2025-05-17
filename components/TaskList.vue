@@ -1,9 +1,9 @@
 <template>
   <div class="task-list container"> 
-    <ul v-if="listStore.selectedListType === 'tasks'" class="item-list">
+    <transition-group tag="ul" v-if="listStore.selectedListType === 'tasks'" name="fade" class="item-list">
       <li v-for="(task, index) in taskStore.tasks" :key="task.id" class="list-item-box container" >
         <div class="list-item">
-          <button class="checkbox" @click="completeTask(task.id)"></button>
+          <button class="checkbox" @click="completeTask(task.id)" :checked="false"></button>
           {{ task.name }}
         </div>
 
@@ -12,20 +12,21 @@
           <button class="list-item-button delete-button" @click="deleteTask(task.id)"><Icon name="mdi:bin" class="button-icon" /></button>
         </div>
       </li>
-    </ul>
+    </transition-group>
+  
 
-    <ul v-else-if="listStore.selectedListType === 'completed'" class="item-list">
+    <transition-group tag="ul" v-if="listStore.selectedListType === 'completed'" name="fade" class="item-list">
       <li v-for="(task, index) in taskStore.completedTasks" :key="task.id" class="list-item-box container" >
         <div class="list-item">
-          <button class="checkbox"></button>
+          <button class="checkbox" @click="completeTask(task.id)" :checked="false"></button>
           {{ task.name }}
         </div>
 
         <div class="list-item-buttons">
-          <button class="list-item-button delete-button" @click="deleteTask(task.id)"><Icon name="mdi:bin" class="button-icon" /></button>
+          <button class="list-item-button delete-button" @click="deleteCompletedTask(task.id)"><Icon name="mdi:bin" class="button-icon" /></button>
         </div>
       </li>
-    </ul>
+    </transition-group>
 
   </div>
 </template>
@@ -38,6 +39,7 @@ const taskStore = useTaskStore();
 const listStore = useListTypeStore();
 const { completeTask } = taskStore;
 const { deleteTask } = taskStore;
+const { deleteCompletedTask } = taskStore;
 </script>
 
 <style scoped>
@@ -104,6 +106,12 @@ const { deleteTask } = taskStore;
 .button-icon {
   height: 100%;
   width: 100%;
+}
+.fade-leave-active {
+  transition: all 1s ease-in;
+}
+.fade-leave-to {
+  opacity: 0;
 }
 
 

@@ -1,7 +1,7 @@
 <template>
-  <div class="new-task container">
-    <input class="new-task-input" v-model="newTask" placeholder="Add New Task"/>
-    <button class="new-task-button" @click="add">+</button>
+  <div class="new-task">
+    <input class="new-task-input container" v-model="newTask" placeholder="Add New Task"/>
+    <button class="new-task-button" @click="add"><Icon name="iconoir:plus-square-solid" class="new-task-icon" /></button>
   </div>
 </template>
 
@@ -41,10 +41,10 @@ onUnmounted(() => {
 .new-task {
   display: flex;
   align-items: center;
-  height: 30px;
   position: relative;
   cursor: text;
-  height: 52px;
+  height: 55px;
+  width: 100%;
 }
 .new-task-input {
   appearance: none;
@@ -52,16 +52,17 @@ onUnmounted(() => {
   -webkit-appearance: none;
   width: 100%;
   height: 100%;
-  border: none;
-  padding: 0 15px;
+  padding: 0 10px;
   cursor: text;
-  border-radius: 10px;
   font-size: 0.9rem;
   font-family: inherit;
 }
 .new-task-input:focus {
   outline: none;
 } 
+.new-task-input:focus::placeholder {
+  color: white;
+}
 .new-task-input::placeholder {
   color: var(--placeholdergrey);
   font-weight: 150;
@@ -70,17 +71,26 @@ onUnmounted(() => {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
-  height: 27px;
-  width: 27px;
-  background-color: var(--maingrey);
-  color: var(--offwhite);
+  border: none;
+  background: none;
+  height: 30px;
+  width: 30px;
   position: absolute;
-  right: 8px;
-  border-radius: 5px;
-  font-size: 1.2rem;
+  right: 6px;
+  top: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.new-task-button:hover {
+  transform: scale(1.05);
+}
+.new-task-button:active {
+  transform: scale(1);
+}
+.new-task-icon {
+  width: 100%;
+  height: 100%;
 }
 
 </style>

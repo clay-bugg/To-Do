@@ -6,7 +6,7 @@
 :root {
   --maingrey: #333333;
   --mainwhite: #FFFFFF;
-  --offwhite: #F0F0F0;
+  --offwhite: #f2f2f2;
   --placeholdergrey: #949494;
   --mainfont: 'Inter';
 }
@@ -40,11 +40,11 @@ input[type="text"] {
 }
 
 .container {
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   width: 100%;
   background-color: var(--mainwhite);
-  box-shadow: inset 0 -3px 2px 0.5px rgba(0,0,0,0.1);
+  box-shadow: inset 0 -3px 2px  rgba(0,0,0,0.2);
 }
 
 
