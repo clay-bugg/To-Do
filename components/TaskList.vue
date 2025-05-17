@@ -8,21 +8,21 @@
         </div>
 
         <div class="list-item-buttons">
-          <button class="list-item-button edit-button">edit</button>
-          <button class="list-item-button delete-button" @click="deleteTask(task.id)"></button>
+          <button class="list-item-button edit-button" @click="editTask(task.id)"><Icon name="clarity:edit-solid" class="button-icon" /></button>
+          <button class="list-item-button delete-button" @click="deleteTask(task.id)"><Icon name="mdi:bin" class="button-icon" /></button>
         </div>
       </li>
     </ul>
 
     <ul v-else-if="listStore.selectedListType === 'completed'" class="item-list">
-      <li v-for="(task, index) in taskStore.completedTasks" :key="task.id" class="list-item-box" >
+      <li v-for="(task, index) in taskStore.completedTasks" :key="task.id" class="list-item-box container" >
         <div class="list-item">
           <button class="checkbox"></button>
           {{ task.name }}
         </div>
 
         <div class="list-item-buttons">
-          <button class="list-item-button delete-button">delete</button>
+          <button class="list-item-button delete-button" @click="deleteTask(task.id)"><Icon name="mdi:bin" class="button-icon" /></button>
         </div>
       </li>
     </ul>
@@ -77,7 +77,7 @@ const { deleteTask } = taskStore;
   align-items: center;
   justify-content: space-between;
   width: fit-content;
-  gap: 5px;
+  gap: 8px;
   height: 100%;
 }
 .checkbox {
@@ -87,9 +87,25 @@ const { deleteTask } = taskStore;
   background-color: var(--mainwhite);
 }
 .list-item-button {
-  height: 20px;
-  width: 20px;
+  height: 26px;
+  width: 26px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.list-item-button:hover {
+  transform: scale(1.1)
+}
+.button-icon {
+  height: 100%;
+  width: 100%;
+}
+
 
 
 </style>
