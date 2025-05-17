@@ -1,9 +1,9 @@
 <template>
-  <div v-if="listStore.selectedListType === 'tasks'" class="task-list container"> 
-    <ul class="item-list">
-      <li v-for="(task, index) in taskStore.tasks" :key="index" class="list-item-box" >
+  <div class="task-list container"> 
+    <ul v-if="listStore.selectedListType === 'tasks'" class="item-list">
+      <li v-for="(task, index) in taskStore.tasks" :key="task.id" class="list-item-box" >
         <div class="list-item">
-          <button class="checkbox"></button>
+          <button class="checkbox" @click="completeTask(task.id)"></button>
           {{ task.name }}
         </div>
 
@@ -13,22 +13,30 @@
         </div>
       </li>
     </ul>
+    <ul v-else-if="listStore.selectedListType === 'completed'" class="item-list">
+      <li v-for="(task, index) in taskStore.completedTasks" :key="task.id" class="list-item-box" >
+        <div class="list-item">
+          <button class="checkbox"></button>
+          {{ task.name }}
+        </div>
+
+        <div class="list-item-buttons">
+          <button class="list-item-button delete-button">delete</button>
+        </div>
+      </li>
+    </ul>
+
   </div>
 </template>
 
 <script setup>
-import { watch } from 'vue';
 import { useListTypeStore } from '@/stores/listTypeStore';
 import { useTaskStore } from '@/stores/taskStore';
 
 const taskStore = useTaskStore();
 const listStore = useListTypeStore();
 
-function isChecked(id) { 
-  console.log(id)
-}
-
-
+const { completeTask } = taskStore;
 </script>
 
 <style scoped>

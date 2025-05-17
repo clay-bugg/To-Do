@@ -12,10 +12,10 @@ export const useTaskStore = defineStore('task', () => {
     if (!name) return;
     tasks.value.push({ id: nextId++, name });
   }
-  function completeTask(name: string) { 
-    if (!name) return;
+  function completeTask(id: number) { 
+    if (!id) return;
 
-    const i = tasks.value.findIndex(task => task.name === name);
+    const i = tasks.value.findIndex(task => task.id === id);
     if (i === -1) return;
 
     const [task] = tasks.value.splice(i, 1);
