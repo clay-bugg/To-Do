@@ -3,7 +3,9 @@
     <transition-group tag="ul" v-if="listStore.selectedListType === 'tasks'" name="fade" class="item-list">
       <li v-for="(task, index) in taskStore.tasks" :key="task.id" class="list-item-box container" >
         <div class="list-item">
-          <button class="checkbox" @click="completeTask(task.id)" :checked="false"></button>
+          <button class="checkbox">
+            <Icon name="qlementine-icons:check-tick-16" class="checkbox-icon"/>
+          </button>
           {{ task.name }}
         </div>
 
@@ -14,16 +16,17 @@
       </li>
     </transition-group>
   
-
     <transition-group tag="ul" v-if="listStore.selectedListType === 'completed'" name="fade" class="item-list">
-      <li v-for="(task, index) in taskStore.completedTasks" :key="task.id" class="list-item-box container" >
+      <li v-for="(task, index) in taskStore.completedTasks" :key="task.id" class="list-item-box container">
         <div class="list-item">
-          <button class="checkbox" @click="completeTask(task.id)" :checked="false"></button>
+          <button class="checkbox"></button>
           {{ task.name }}
         </div>
 
         <div class="list-item-buttons">
-          <button class="list-item-button delete-button" @click="deleteCompletedTask(task.id)"><Icon name="mdi:bin" class="button-icon" /></button>
+          <button class="list-item-button delete-button" @click="deleteCompletedTask(task.id)">
+            <Icon name="mdi:bin" class="button-icon" />
+          </button>
         </div>
       </li>
     </transition-group>
@@ -40,6 +43,8 @@ const listStore = useListTypeStore();
 const { completeTask } = taskStore;
 const { deleteTask } = taskStore;
 const { deleteCompletedTask } = taskStore;
+
+
 </script>
 
 <style scoped>
@@ -87,7 +92,20 @@ const { deleteCompletedTask } = taskStore;
   height: 20px;
   border-radius: 50px;
   background-color: var(--mainwhite);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.checkbox-icon {
+  display: none;
+  appearance: none;
+  opacity: 0;
+}
+.checked {
+  height: 100%;
+  width: 100%;
+}
+
 .list-item-button {
   height: 26px;
   width: 26px;
@@ -101,7 +119,7 @@ const { deleteCompletedTask } = taskStore;
   justify-content: center;
 }
 .list-item-button:hover {
-  transform: scale(1.1)
+  transform: scale(1.1);
 }
 .button-icon {
   height: 100%;
@@ -113,7 +131,5 @@ const { deleteCompletedTask } = taskStore;
 .fade-leave-to {
   opacity: 0;
 }
-
-
 
 </style>

@@ -2,18 +2,17 @@ import { nanoid } from 'nanoid'
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
-let nextId = 1;
-
 export const useTaskStore = defineStore('task', () => {
 
-  const tasks = ref<{ id: string; name: string }[]>([]);
-  const completedTasks = ref<{ id: string; name: string }[]>([]);
-  const deletedTasks = ref<{ id: string; name: string }[]>([]);
+  const tasks = ref<{ id: string; name: string; checked: boolean }[]>([]);
+  const completedTasks = ref<{ id: string; name: string; checked: boolean }[]>([]);
+  const deletedTasks = ref<{ id: string; name: string;  checked: boolean }[]>([]);
   
   function addTask(name: string) { 
     if (!name) return;
-    tasks.value.push({ id: nanoid(), name });
+    tasks.value.push({ id: nanoid(), name, checked: false });
   }
+
   function completeTask(id: string) { 
     if (!id) return;
 
@@ -21,6 +20,7 @@ export const useTaskStore = defineStore('task', () => {
     if (i === -1) return;
 
     const [task] = tasks.value.splice(i, 1);
+    
     completedTasks.value.push(task);
   }
   function deleteTask(id: string) { 
@@ -47,6 +47,6 @@ export const useTaskStore = defineStore('task', () => {
     addTask,
     completeTask,
     deleteTask,
-    deleteCompletedTask
+    deleteCompletedTask,
   }
 });
