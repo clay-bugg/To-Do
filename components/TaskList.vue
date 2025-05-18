@@ -3,7 +3,7 @@
     <transition-group tag="ul" v-if="listStore.selectedListType === 'tasks'" name="fade" class="item-list">
       <li v-for="(task, index) in taskStore.tasks" :key="task.id" class="list-item-box container" >
         <div class="list-item">
-          <button class="checkbox">
+          <button class="checkbox" @click="completeTask(task.id)">
             <Icon name="qlementine-icons:check-tick-16" class="checkbox-icon"/>
           </button>
           {{ task.name }}
