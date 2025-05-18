@@ -1,39 +1,38 @@
 <template>
-  <div class="new-task">
+  <div v-show="listStore.selectedListType === 'tasks'" class="new-task">
     <input class="new-task-input container" v-model="newTask" placeholder="Add New Task"/>
     <button class="new-task-button" @click="add"><Icon name="iconoir:plus-square-solid" class="new-task-icon" /></button>
   </div>
+  
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
 
-import { useTaskStore } from '@/stores/taskStore'
+import { ref, onMounted, onUnmounted } from 'vue';
+import { useTaskStore } from '@/stores/taskStore';
+import { useListTypeStore } from '@/stores/listTypeStore';
 
 const taskStore = useTaskStore();
-
+const listStore = useListTypeStore();
 const newTask = ref('');
 
-function enterPressed(e) { 
-  if (e.key === 'Enter') { 
+function enterPressed(e) {
+  if (e.key === 'Enter') {
     add()
   }
 }
-
 function add() {
   if (!newTask.value) return;
     taskStore.addTask(newTask.value);
     newTask.value = '';
   }
-
 onMounted(() => { 
   window.addEventListener('keydown', enterPressed);
 })
-
 onUnmounted(() => { 
   window.removeEventListener('keydown', enterPressed);
 })
-  
+
 </script>
 
 <style scoped>
@@ -91,5 +90,4 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
 }
-
 </style>
