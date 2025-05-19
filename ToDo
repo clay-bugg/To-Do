@@ -3,10 +3,8 @@
 --MenuButtons---------
 
 --NewTaskInput--------
--add conditional v-if for list type
 
 --TaskList------------
--add undo function for each task
 -add checkbox checked styling
 
 

@@ -22,6 +22,7 @@ export const useTaskStore = defineStore('task', () => {
     const [task] = tasks.value.splice(i, 1);
     
     completedTasks.value.push(task);
+    console.log(completedTasks.value);
   }
   function deleteTask(id: string) { 
     if (!id) return;
@@ -31,14 +32,21 @@ export const useTaskStore = defineStore('task', () => {
 
     const [task] = tasks.value.splice(i, 1);
     deletedTasks.value.push(task);
+    console.log(deletedTasks.value);
   }
   function deleteCompletedTask(id: string) {
     const i = completedTasks.value.findIndex(task => task.id === id);
     if (i === -1) return;
     const [task] = completedTasks.value.splice(i, 1);
     deletedTasks.value.push(task);
-    console.log(completedTasks.value)
     console.log(deletedTasks.value)
+  }
+  function undoTask(id: string) { 
+    const i = completedTasks.value.findIndex((task) => task.id === id);
+    if (i === -1) return;
+    const [task] = completedTasks.value.splice(i, 1);
+    tasks.value.push(task);
+    console.log(tasks.value);
   }
 
   return {
@@ -48,5 +56,6 @@ export const useTaskStore = defineStore('task', () => {
     completeTask,
     deleteTask,
     deleteCompletedTask,
+    undoTask,
   }
 });

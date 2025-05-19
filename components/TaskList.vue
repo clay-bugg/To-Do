@@ -3,15 +3,19 @@
     <transition-group tag="ul" v-if="listStore.selectedListType === 'tasks'" name="fade" class="item-list">
       <li v-for="(task, index) in taskStore.tasks" :key="task.id" class="list-item-box container" >
         <div class="list-item">
-          <button class="checkbox" @click="completeTask(task.id)">
-            <Icon name="qlementine-icons:check-tick-16" class="checkbox-icon"/>
+          <button class="checkbox" @click="completeTask(task.id)" :checked="false" id="tick-icon" title="Complete Task">
+            <Icon name="qlementine-icons:check-tick-16" class="checkbox-icon" />
           </button>
           {{ task.name }}
         </div>
 
         <div class="list-item-buttons">
-          <button class="list-item-button edit-button" @click="editTask(task.id)"><Icon name="clarity:edit-solid" class="button-icon" /></button>
-          <button class="list-item-button delete-button" @click="deleteTask(task.id)"><Icon name="mdi:bin" class="button-icon" /></button>
+          <button class="list-item-button edit-button" @click="editTask(task.id)" id="edit-icon" title="Edit">
+            <Icon name="clarity:edit-solid" class="button-icon" />
+          </button>
+          <button class="list-item-button delete-button" @click="deleteTask(task.id)" id="bin-icon" title="Delete">
+            <Icon name="mdi:bin" class="button-icon" />
+          </button>
         </div>
       </li>
     </transition-group>
@@ -24,7 +28,10 @@
         </div>
 
         <div class="list-item-buttons">
-          <button class="list-item-button delete-button" @click="deleteCompletedTask(task.id)">
+          <button class="list-item-button undo-button" @click="undoTask(task.id)" id="undo-icon" title="Undo">
+            <Icon name="fa:undo" class="button-icon" />
+          </button>
+          <button class="list-item-button delete-button" @click="deleteCompletedTask(task.id)" id="bin-icon" title="Delete">
             <Icon name="mdi:bin" class="button-icon" />
           </button>
         </div>
@@ -35,6 +42,7 @@
 </template>
 
 <script setup>
+
 import { useListTypeStore } from '@/stores/listTypeStore';
 import { useTaskStore } from '@/stores/taskStore';
 
@@ -43,7 +51,7 @@ const listStore = useListTypeStore();
 const { completeTask } = taskStore;
 const { deleteTask } = taskStore;
 const { deleteCompletedTask } = taskStore;
-
+const { undoTask } = taskStore;
 
 </script>
 
@@ -105,7 +113,6 @@ const { deleteCompletedTask } = taskStore;
   height: 100%;
   width: 100%;
 }
-
 .list-item-button {
   height: 26px;
   width: 26px;
@@ -121,6 +128,9 @@ const { deleteCompletedTask } = taskStore;
 .list-item-button:hover {
   transform: scale(1.1);
 }
+#undo-icon {
+  padding: 2px;
+}
 .button-icon {
   height: 100%;
   width: 100%;
@@ -131,5 +141,4 @@ const { deleteCompletedTask } = taskStore;
 .fade-leave-to {
   opacity: 0;
 }
-
 </style>

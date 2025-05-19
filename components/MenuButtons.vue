@@ -1,7 +1,7 @@
 <template>
     <div class ="menu-buttons">
-      <button class="menu-button" :class="{ active: store.selectedListType === 'tasks' }" @click="store.select('tasks')">Tasks</button>
-      <button class="menu-button" :class="{ active: store.selectedListType === 'completed' }" @click="store.select('completed')">Completed</button>
+      <button class="menu-button" :class="{ active: store.selectedListType === 'tasks' }" @click="store.select('tasks')" title="Tasks">Tasks</button>
+      <button class="menu-button" :class="{ active: store.selectedListType === 'completed' }" @click="store.select('completed')" title="Completed">Completed</button>
     </div>
 </template>
 

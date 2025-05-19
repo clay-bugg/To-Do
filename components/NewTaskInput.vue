@@ -1,9 +1,10 @@
 <template>
   <div v-show="listStore.selectedListType === 'tasks'" class="new-task">
     <input class="new-task-input container" v-model="newTask" placeholder="Add New Task"/>
-    <button class="new-task-button" @click="add"><Icon name="iconoir:plus-square-solid" class="new-task-icon" /></button>
+    <button class="new-task-button" @click="add()" title="Add">
+      <Icon name="iconoir:plus-square-solid" id="add-icon"/>
+    </button>
   </div>
-  
 </template>
 
 <script setup>
@@ -11,6 +12,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useTaskStore } from '@/stores/taskStore';
 import { useListTypeStore } from '@/stores/listTypeStore';
+
 
 const taskStore = useTaskStore();
 const listStore = useListTypeStore();
@@ -50,10 +52,11 @@ onUnmounted(() => {
   -webkit-appearance: none;
   width: 100%;
   height: 100%;
-  padding: 0 10px;
+  padding: 0px;
   cursor: text;
   font-size: 0.9rem;
   font-family: inherit;
+  padding: 0 10px;
 }
 .new-task-input:focus {
   outline: none;
@@ -74,20 +77,15 @@ onUnmounted(() => {
   height: 30px;
   width: 30px;
   position: absolute;
-  right: 6px;
   top: 6px;
+  right: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
-.new-task-button:hover {
-  transform: scale(1.05);
-}
-.new-task-button:active {
-  transform: scale(1);
-}
-.new-task-icon {
-  width: 100%;
-  height: 100%;
+#add-icon {
+  width: 100px;
+  height: 100px;
 }
 </style>
