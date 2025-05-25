@@ -112,6 +112,9 @@
 /*---Imports---*/
 import { useListTypeStore } from '@/stores/listTypeStore';
 import { useTaskStore } from '@/stores/taskStore';
+/*---API---*/
+const { data } = await useFetch('http://localhost:3001/api/hello');
+console.log(data.value); // { message: 'Hello from Express!' }
 /*---Stores---*/
 const taskStore = useTaskStore();
 const listStore = useListTypeStore();
