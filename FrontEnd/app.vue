@@ -1,10 +1,7 @@
 <template>
   <div class="page">
     <div class="app">
-      <div class="login container">
-        <Button class="login-button" id="login":label="'Login'" />
-        <Button class="login-button" id="sign-up":label="'Sign Up'" />
-      </div>
+      <Header />
       <div class="todo-list container">
         <MenuButtons :list-change="changeListType" />
         <NewTaskInput />
@@ -33,35 +30,14 @@ function changeListType(val) {
  width: 100vw;
  height: 100vh;
  margin: 0 auto;
- padding: 20px;
 }
 .app{
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 50px;
   align-items: flex-end;
   justify-content: center;
 }
-.login {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: fit-content;
-  padding: 10px  30px;
-  border-radius: 15px;
-}
-.login-button {
-  background-color: black;
-}
-#login:hover {
-  background-color: green;
-  color: var(--offwhite);
-}
-#sign-up:hover {
-  background-color: red;
-  color: var(--offwhite);
-}
-
 .todo-list {
   height: 700px;
   width: 550px;
