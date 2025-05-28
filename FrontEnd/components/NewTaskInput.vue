@@ -1,14 +1,8 @@
 <template>
-  <div v-show="listStore.selectedListType === 'tasks'"
-       class="new-task">
-    <input class="new-task-input container"
-           v-model="newTask"
-           placeholder="Add New Task" />
-    <button class="new-task-button"
-            @click="add()"
-            title="Add">
-      <Icon name="iconoir:plus-square-solid"
-            id="add-icon" />
+  <div v-show="listStore.selectedListType === 'tasks'" class="new-task">
+    <input class="new-task-input container" v-model="newTask" placeholder="Add New Task" />
+    <button class="new-task-button" @click="add()" title="Add">
+      <Icon name="iconoir:plus-square-solid" id="add-icon" />
     </button>
   </div>
 </template>

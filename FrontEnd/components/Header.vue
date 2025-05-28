@@ -1,10 +1,10 @@
 <template>
   <header class="container">
-    <Login />
+    <Login :buttons="['Login', 'Sign Up']"/>
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 </script>
 
@@ -15,6 +15,7 @@ header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 45px;
+  z-index: 1;
 }
 </style>

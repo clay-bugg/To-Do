@@ -6,7 +6,7 @@
   </button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
@@ -17,22 +17,19 @@ const props = defineProps({
 <style scoped>
 /* From Uiverse.io by satyamchaudharydev */ 
 button {
-  --primary-color: #645bff;
-  --secondary-color: #fff;
-  --hover-color: #111;
   --arrow-width: 10px;
   --arrow-stroke: 2px;
   box-sizing: border-box;
   border: 0;
   border-radius: 20px;
-  color: var(--secondary-color);
+  color: var(--offwhite);
   padding: 1em 1.8em;
-  background: var(--primary-color);
+  background: var(--maingrey);
   display: flex;
   transition: 0.2s background;
   align-items: center;
   gap: 0.6em;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 button .arrow-wrapper {
@@ -44,7 +41,7 @@ button .arrow-wrapper {
 button .arrow {
   margin-top: 1px;
   width: var(--arrow-width);
-  background: var(--primary-color);
+  background: var(--maingrey);
   height: var(--arrow-stroke);
   position: relative;
   transition: 0.2s;
@@ -54,7 +51,7 @@ button .arrow::before {
   content: "";
   box-sizing: border-box;
   position: absolute;
-  border: solid var(--secondary-color);
+  border: solid var(--offwhite);
   border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
   display: inline-block;
   top: -3px;
@@ -65,11 +62,11 @@ button .arrow::before {
 }
 
 button:hover {
-  background-color: var(--hover-color);
+  background-color: black;
 }
 
 button:hover .arrow {
-  background: var(--secondary-color);
+  background: var(--offwhite);
 }
 
 button:hover .arrow:before {

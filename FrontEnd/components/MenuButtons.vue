@@ -6,7 +6,7 @@
 
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useListTypeStore } from '@/stores/listTypeStore';
 const store = useListTypeStore();
 </script>

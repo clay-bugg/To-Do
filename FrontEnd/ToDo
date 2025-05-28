@@ -8,8 +8,11 @@
 
 
 --taskList----------------
-
--add checkbox checked styling
+- 
+-add checkbox and checkbox.checked styling
 -sort out overflow on list items
+
+--login--------
+-debug panel opening/closing
 
 

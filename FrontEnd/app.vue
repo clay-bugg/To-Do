@@ -21,8 +21,6 @@ const taskList = [];
 function changeListType(val) { 
   selectedList.value = val;
 }
-
-
 </script>
 
 <style scoped>

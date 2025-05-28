@@ -31,6 +31,10 @@ button:hover {
   cursor: pointer;
   filter: brightness(96%);
 }
+input,
+button {
+  font-family: inherit;
+}
 input[type="text"] {
   cursor: text;
 }
