@@ -15,7 +15,7 @@
         <div class="list-item-buttons">
           <button class="list-item-button edit-button" @click="editTask(task.id)" title="Edit">
             <Icon v-if="task.editing === true" name="charm:tick" class="button-icon" id="tick-icon" />
-            <Icon v-else="task.editing === false" name="clarity:edit-solid" class="button-icon" id="edit-icon" />
+            <Icon v-else name="clarity:edit-solid" class="button-icon" id="edit-icon" />
           </button>
 
           <button class="list-item-button delete-button" @click="deleteTask(task.id)" id="bin-icon" title="Delete">
