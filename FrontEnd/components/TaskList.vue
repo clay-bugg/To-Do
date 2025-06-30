@@ -92,7 +92,7 @@ const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = ta
   align-items: center;
   justify-content: space-between;
   width: fit-content;
-  gap: 15px;
+  gap: 16px;
   font-size: 0.9rem;
 }
 .completed-list-item {
@@ -101,15 +101,16 @@ const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = ta
 }
 .task-edit-input {
   height: 100%;
-  font-size: 1rem;
-  font-weight: 100;
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
   border: 0.5px solid black;
   border-radius: 5px;
-  font-weight: 200;
-  padding: 2px 5px;
+  font-weight: 300;
+  padding: 0 5px;
+  font-size: 20px;
+  position: relative;
+  right: 6px;
 }
 /*---Checkbox---*/
 .checkbox {
