@@ -14,7 +14,7 @@
 
         <div class="list-item-buttons">
           <button class="list-item-button edit-button" @click="editTask(task.id)" title="Edit">
-            <Icon v-if="task.editing === true" name="charm:tick" class="button-icon" id="tick-icon" />
+            <Icon v-if="task.editing === true" name="ph:check-fat-fill" class="button-icon" id="tick-icon" />
             <Icon v-else name="clarity:edit-solid" class="button-icon" id="edit-icon" />
           </button>
 
@@ -114,16 +114,14 @@ const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = ta
 }
 /*---Checkbox---*/
 .checkbox {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
   background-color: var(--mainwhite);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   background-color: var(--offwhite);
-  border-radius: 50px;
-  padding: 0.2em;
 
 }
 .checkbox:checked {
@@ -155,8 +153,8 @@ const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = ta
   height: 100%;
 }
 .list-item-button {
-  height: 26px;
-  width: 26px;
+  height: 28px;
+  width: 28px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
