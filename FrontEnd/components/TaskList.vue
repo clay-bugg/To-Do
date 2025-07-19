@@ -70,7 +70,7 @@
         <div class="list-item-buttons">
           <button
             class="list-item-button undo-button"
-            @click="updateTask(task.id, { completed: task.completed })"
+            @click="updateTask(task.id, { completed: !task.completed })"
             id="undo-icon"
             title="Undo"
           >
