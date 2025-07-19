@@ -1,11 +1,10 @@
 //---Imports---//
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { nanoid } from 'nanoid'
 
 export const useTaskStore = defineStore('task', () => {
   const tasks = ref([])
-  const apuUrl = 'http://localhost:3001/api/tasks'
+  const apiUrl = 'http://localhost:3001/api/tasks'
   
   //GET /api/tasks
   async function fetchTasks() { 
@@ -30,7 +29,7 @@ export const useTaskStore = defineStore('task', () => {
       console.error('Failed to add task:', err)
     }
   }
-  //PATCH /api/tasks.:id
+  //PATCH /api/tasks/:id
   async function updateTask(id, updates) { 
     try { 
       const res = await fetch(`${apiUrl}/${id}`, {
@@ -51,10 +50,10 @@ export const useTaskStore = defineStore('task', () => {
   //DELETE /api/tasks/:id
   async function deleteTask(id) { 
     try {
-      await fetchTasks(`${apiUrl}/${id}`, { method: 'DELETE' })
+      await fetch(`${apiUrl}/${id}`, { method: 'DELETE' })
       tasks.value = tasks.value.filter(task => task.id !== id)
     } catch (err) { 
-      console.error('Failed tp delete task:', err)
+      console.error('Failed to delete task:', err)
     }
   }
 

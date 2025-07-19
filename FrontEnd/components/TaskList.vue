@@ -1,43 +1,91 @@
 <template>
   <div class="task-list container">
-
-    <transition-group tag="ul" v-if="selectedListType === 'tasks'" name="fade" class="item-list">
+    <transition-group
+      v-if="selectedListType === 'tasks'"
+      tag="ul"
+      name="fade"
+      class="item-list"
+    >
       <li v-for="task in tasks" :key="task.id" class="list-item-box container">
-
         <div class="list-item">
-          <input type="checkbox" :class="['checkbox', { 'checked': task.checked }]" @change="completeTask(task.id)" :checked="task.checked"/>
-          <input v-if="task.editing === true" v-model="task.name" @keyup.enter="editTask(task.id)" class="task-edit-input" />
-          <p v-else-if="task.editing === false" @dblclick="editTask(task.id)" class="task-name">
+          <input
+            type="checkbox"
+            :class="['checkbox', { checked: task.completed }]"
+            @change="updateTask(task.id, { completed: !task.completed })"
+            :checked="task.completed"
+          />
+          <input
+            v-if="editingId === task.id"
+            v-model="editedName"
+            @keyup.enter="submitEdit(task)"
+            @blur="submitEdit(task)"
+            class="task-edit-input"
+          />
+          <p v-else @dblclick="startEditing(task)" class="task-name">
             {{ task.name }}
           </p>
         </div>
-
         <div class="list-item-buttons">
-          <button class="list-item-button edit-button" @click="editTask(task.id)" title="Edit">
-            <Icon v-if="task.editing === true" name="ph:check-fat-fill" class="button-icon" id="tick-icon" />
-            <Icon v-else name="clarity:edit-solid" class="button-icon" id="edit-icon" />
+          <button
+            class="list-item-button edit-button"
+            @click="editingId === task.id ? submitEdit(task) : startEditing(task)"
+            title="Edit"
+          >
+            <Icon
+              v-if="editingId === task.id"
+              name="ph:check-fat-fill"
+              class="button-icon"
+              id="tick-icon"
+            />
+            <Icon
+              v-else
+              name="clarity:edit-solid"
+              class="button-icon"
+              id="edit-icon"
+            />
           </button>
 
-          <button class="list-item-button delete-button" @click="deleteTask(task.id)" id="bin-icon" title="Delete">
+          <button
+            class="list-item-button delete-button"
+            @click="deleteTask(task.id)"
+            id="bin-icon"
+            title="Delete"
+          >
             <Icon name="mdi:bin" class="button-icon" />
           </button>
-
         </div>
       </li>
     </transition-group>
 
-    <transition-group tag="ul" v-if="selectedListType === 'completed'" name="fade" class="item-list">
-      <li v-for="task in completedTasks" :key="task.id" class="list-item-box container">
-
+    <transition-group
+      tag="ul"
+      v-if="selectedListType === 'completed'"
+      name="fade"
+      class="item-list"
+    >
+      <li
+        v-for="task in completedTasks"
+        :key="task.id"
+        class="list-item-box container"
+      >
         <div class="list-item completed-list-item">
-    
           <p>{{ task.name }}</p>
         </div>
         <div class="list-item-buttons">
-          <button class="list-item-button undo-button" @click="undoTask(task.id)" id="undo-icon" title="Undo">
+          <button
+            class="list-item-button undo-button"
+            @click="updateTask(task.id, { completed: !task.completed })"
+            id="undo-icon"
+            title="Undo"
+          >
             <Icon name="fa:undo" class="button-icon" />
           </button>
-          <button class="list-item-button delete-button" @click="deleteCompletedTask(task.id)" id="bin-icon" title="Delete">
+          <button
+            class="list-item-button delete-button"
+            @click="deleteTask(task.id)"
+            id="bin-icon"
+            title="Delete"
+          >
             <Icon name="mdi:bin" class="button-icon" />
           </button>
         </div>
@@ -48,14 +96,32 @@
 
 <script setup>
 /*---Imports---*/
-import { ref, onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
+import { ref, onMounted } from "vue";
+import { storeToRefs } from "pinia";
 
 /*---Stores---*/
-const { tasks, completedTasks } = storeToRefs(useTaskStore())
-const { selectedListType } = storeToRefs(useListTypeStore())
-
-const { fetchTasks, deleteTask, deleteCompletedTask, undoTask, editTask } = useTaskStore()
+const { tasks } = storeToRefs(useTaskStore());
+const { selectedListType } = storeToRefs(useListTypeStore());
+const { updateTask, deleteTask } = useTaskStore();
+/*---Variables---*/
+const editingId = ref(null);
+const editedName = ref("");
+/*---Functions---*/
+function startEditing(task) {
+  editingId.value = task.id;
+  editedName.value = task.name;
+}
+function cancelEditing() {
+  editingId.value = null;
+  editedName.value = "";
+}
+function submitEdit(task) {
+  const trimmed = editedName.value.trim();
+  if (trimmed && trimmed !== task.name) {
+    updateTask(task.id, { name: trimmed });
+  }
+  cancelEditing();
+}
 </script>
 
 <style scoped>

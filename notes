@@ -1,0 +1,53 @@
+<input
+  v-if="editingId === task.id"
+  v-model="editedName"
+  @keyup.enter="submitEdit(task)"
+  @blur="submitEdit(task)"
+  class="task-edit-input"
+/>
+<p
+  v-else
+  @dblclick="startEditing(task)"
+  class="task-name"
+>
+  {{ task.name }}
+</p>
+
+<button
+  class="list-item-button edit-button"
+  @click="editingId === task.id ? submitEdit(task) : startEditing(task)"
+  title="Edit"
+>
+  <Icon
+    v-if="editingId === task.id"
+    name="ph:check-fat-fill"
+    class="button-icon"
+    id="tick-icon"
+  />
+  <Icon
+    v-else
+    name="clarity:edit-solid"
+    class="button-icon"
+    id="edit-icon"
+  />
+</button>
+<script setup>
+
+function startEditing(task) {
+  editingId.value = task.id
+  editedName.value = task.name
+}
+
+function cancelEditing() {
+  editingId.value = null
+  editedName.value = ''
+}
+
+function submitEdit(task) {
+  const trimmed = editedName.value.trim()
+  if (trimmed && trimmed !== task.name) {
+    updateTask(task.id, { name: trimmed })
+  }
+  cancelEditing()
+}
+</script>
