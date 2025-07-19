@@ -23,7 +23,7 @@ function enterPressed(e) {
 }
 function add() {
   if (!newTask.value) return;
-  addTask(newTask.value);
+  addTask(newTask.value.trim());
   newTask.value = '';
 }
 onMounted(() => {
