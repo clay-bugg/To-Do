@@ -55,7 +55,7 @@ import { storeToRefs } from 'pinia'
 const { tasks, completedTasks } = storeToRefs(useTaskStore())
 const { selectedListType } = storeToRefs(useListTypeStore())
 
-const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = useTaskStore()
+const { fetchTasks, deleteTask, deleteCompletedTask, undoTask, editTask } = useTaskStore()
 </script>
 
 <style scoped>

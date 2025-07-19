@@ -12,10 +12,14 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue';
+import { ref, defineEmits, onMounted } from 'vue';
+const { fetchTasks } = useTaskStore()
+
+onMounted(() => { 
+  fetchTasks()
+})
 
 const selectedList = ref('tasks');
-
 const taskList = [];
 
 function changeListType(val) { 

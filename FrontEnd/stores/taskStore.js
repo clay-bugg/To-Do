@@ -4,16 +4,33 @@ import { defineStore } from 'pinia'
 import { nanoid } from 'nanoid'
 
 export const useTaskStore = defineStore('task', () => {
-  //--Constants--//
   const tasks = ref([])
-  const completedTasks = ref([])
-  const deletedTasks = ref([])
+  const apuUrl = 'http://localhost:3001/api/tasks'
   
-  //---Functions---//
-  function addTask(name) { 
-    if (!name) return;
-    tasks.value.push({ id: nanoid(), name, editing: false, checked: false });
+  //GET /api/tasks
+  async function fetchTasks() { 
+    try {
+      const res = await fetch(apiUrl)
+      tasks.value = await res.json()
+    } catch (err) { 
+      console.error('Failed to fetch tasks:', err)
+    }
   }
+  //POST /api/tasks
+  async function addTask(name) {
+    try {
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      })
+      const newTask = await res.json()
+      tasks.value.push(newTask)
+    } catch (err) { 
+      console.error('Failed to add task:', err)
+    }
+  }
+  
   function completeTask(id) { 
     if (!id) return;
     const i = tasks.value.findIndex(task => task.id === id);
