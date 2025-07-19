@@ -2,11 +2,7 @@ const express = require('express')
 const { v4: uuidv4 } = require('uuid')
 const router = express.Router()
 
-let tasks = [
-  { id: 1, name: 'Wash Dog', completed: false },
-  { id: 2, name: 'Call Nan', completed: true },
-  { id: 3, name: 'Punch Dad', completed: false },
-]
+let tasks = []
 
 router.get('/', (req, res) => { 
   res.json(tasks)

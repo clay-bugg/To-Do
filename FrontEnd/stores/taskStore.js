@@ -11,6 +11,7 @@ export const useTaskStore = defineStore('task', () => {
     try {
       const res = await fetch(apiUrl)
       tasks.value = await res.json()
+      console.log('Tasks database fetched succesfully')
     } catch (err) { 
       console.error('Failed to fetch tasks:', err)
     }
@@ -25,6 +26,7 @@ export const useTaskStore = defineStore('task', () => {
       })
       const newTask = await res.json()
       tasks.value.push(newTask)
+      console.log(`'${name}' added to tasks`)
     } catch (err) { 
       console.error('Failed to add task:', err)
     }
@@ -41,7 +43,9 @@ export const useTaskStore = defineStore('task', () => {
     const updatedTask = await res.json()
     const index = tasks.value.findIndex(task => task.id === id)
     if (index !== -1) { 
+      const oldTask = { ...tasks.value[index] }
       tasks.value[index] = updatedTask
+      console.log('Task updated from', oldTask, 'to', updatedTask)
       }
     } catch (err) {
       console.error('Failed to update task:', err)
@@ -52,6 +56,7 @@ export const useTaskStore = defineStore('task', () => {
     try {
       await fetch(`${apiUrl}/${id}`, { method: 'DELETE' })
       tasks.value = tasks.value.filter(task => task.id !== id)
+      console.log('Task deleted')
     } catch (err) { 
       console.error('Failed to delete task:', err)
     }

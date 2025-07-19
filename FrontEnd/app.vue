@@ -20,7 +20,6 @@ onMounted(() => {
 })
 
 const selectedList = ref('tasks');
-const taskList = [];
 
 function changeListType(val) { 
   selectedList.value = val;

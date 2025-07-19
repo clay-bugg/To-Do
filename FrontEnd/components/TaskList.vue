@@ -6,7 +6,7 @@
       name="fade"
       class="item-list"
     >
-      <li v-for="task in tasks" :key="task.id" class="list-item-box container">
+      <li v-for="task in activeTasks" :key="task.id" class="list-item-box container">
         <div class="list-item">
           <input
             type="checkbox"
@@ -63,18 +63,14 @@
       name="fade"
       class="item-list"
     >
-      <li
-        v-for="task in completedTasks"
-        :key="task.id"
-        class="list-item-box container"
-      >
+      <li v-for="task in completedTasks" :key="task.id" class="list-item-box container">
         <div class="list-item completed-list-item">
           <p>{{ task.name }}</p>
         </div>
         <div class="list-item-buttons">
           <button
             class="list-item-button undo-button"
-            @click="updateTask(task.id, { completed: !task.completed })"
+            @click="updateTask(task.id, { completed: task.completed })"
             id="undo-icon"
             title="Undo"
           >
@@ -104,6 +100,8 @@ const { tasks } = storeToRefs(useTaskStore());
 const { selectedListType } = storeToRefs(useListTypeStore());
 const { updateTask, deleteTask } = useTaskStore();
 /*---Variables---*/
+const activeTasks = computed(() => tasks.value.filter(t => !t.completed))
+const completedTasks = computed(() => tasks.value.filter(t => t.completed))
 const editingId = ref(null);
 const editedName = ref("");
 /*---Functions---*/
