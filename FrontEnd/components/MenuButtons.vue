@@ -1,14 +1,17 @@
 <template>
     <div class ="menu-buttons">
-      <button class="menu-button" :class="{ active: store.selectedListType === 'tasks' }" @click="store.select('tasks')" title="Tasks">Tasks</button>
-      <button class="menu-button" :class="{ active: store.selectedListType === 'completed' }" @click="store.select('completed')" title="Completed">Completed</button>
+      <button class="menu-button" :class="{ active: selectedListType === 'tasks' }" @click="select('tasks')" title="Tasks">Tasks</button>
+      <button class="menu-button" :class="{ active: selectedListType === 'completed' }" @click="select('completed')" title="Completed">Completed</button>
     </div>
 
 </template>
 
-<script setup lang="ts">
-import { useListTypeStore } from '@/stores/listTypeStore';
-const store = useListTypeStore();
+<script setup>
+import { storeToRefs } from 'pinia'
+import { useListTypeStore } from '~/stores/listTypeStore';
+
+const { selectedListType } = storeToRefs(useListTypeStore())
+const { select } = useListTypeStore()
 </script>
 
 <style scoped>

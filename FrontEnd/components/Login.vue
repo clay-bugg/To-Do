@@ -35,7 +35,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 //---Imports---//
 import { ref } from "vue";
 //---Props---//
@@ -95,7 +95,7 @@ async function handleSignup() {
 //---Login/Signup UI---//
 const loginBox = ref(false);
 const signupBox = ref(false);
-function handleUserDetails(button: string) {
+function handleUserDetails(button) {
   button = button.toLowerCase().replace(/\s+/g, '');
   if (button === "login") {
     loginBox.value = true;
@@ -108,7 +108,7 @@ function handleUserDetails(button: string) {
     signupSuccess.value = "";
   }
 }
-function closeForm(button: string) {
+function closeForm(button) {
   if (button === "login") {
     loginBox.value = false;
     error.value = "";

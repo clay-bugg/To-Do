@@ -6,7 +6,7 @@
 
         <div class="list-item">
           <input type="checkbox" :class="['checkbox', { 'checked': task.checked }]" @change="completeTask(task.id)" :checked="task.checked"/>
-          <input v-if="task.editing === true" v-model="task.name" @keyup.enter="editTask(task.id)" class="task-edit-input" v-focus />
+          <input v-if="task.editing === true" v-model="task.name" @keyup.enter="editTask(task.id)" class="task-edit-input" />
           <p v-else-if="task.editing === false" @dblclick="editTask(task.id)" class="task-name">
             {{ task.name }}
           </p>

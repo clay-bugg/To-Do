@@ -6,7 +6,7 @@
   </button>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
