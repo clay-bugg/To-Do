@@ -30,52 +30,40 @@ export const useTaskStore = defineStore('task', () => {
       console.error('Failed to add task:', err)
     }
   }
-  
-  function completeTask(id) { 
-    if (!id) return;
-    const i = tasks.value.findIndex(task => task.id === id);
-    if (i === -1) return;
-    const [task] = tasks.value.splice(i, 1);
-    task.checked = true;
-    completedTasks.value.push(task); 
+  //PATCH /api/tasks.:id
+  async function updateTask(id, updates) { 
+    try { 
+      const res = await fetch(`${apiUrl}/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      })
+
+    const updatedTask = await res.json()
+    const index = tasks.value.findIndex(task => task.id === id)
+    if (index !== -1) { 
+      tasks.value[index] = updatedTask
+      }
+    } catch (err) {
+      console.error('Failed to update task:', err)
+     }
   }
-  function deleteTask(id) { 
-    if (!id) return;
-    const i = tasks.value.findIndex(task => task.id === id);
-    if (i === -1) return;
-    const [task] = tasks.value.splice(i, 1);
-    deletedTasks.value.push(task);
-  }
-  function deleteCompletedTask(id) {
-    const i = completedTasks.value.findIndex(task => task.id === id);
-    if (i === -1) return;
-    const [task] = completedTasks.value.splice(i, 1);
-    deletedTasks.value.push(task);
-  }
-  function undoTask(id) { 
-    const i = completedTasks.value.findIndex((task) => task.id === id);
-    if (i === -1) return;
-    const [task] = completedTasks.value.splice(i, 1);
-    task.checked = false;
-    tasks.value.push(task);
-  }
-  function editTask(id) { 
-    const i = tasks.value.findIndex((task) => task.id === id);
-    if (i === -1) return;
-    const task = tasks.value[i];
-    if (!task) return;
-    task.editing = !task.editing;
+  //DELETE /api/tasks/:id
+  async function deleteTask(id) { 
+    try {
+      await fetchTasks(`${apiUrl}/${id}`, { method: 'DELETE' })
+      tasks.value = tasks.value.filter(task => task.id !== id)
+    } catch (err) { 
+      console.error('Failed tp delete task:', err)
+    }
   }
 
   return {
+    fetchTasks,
     tasks,
-    completedTasks,
     addTask,
-    completeTask,
+    updateTask,
     deleteTask,
-    deleteCompletedTask,
-    undoTask,
-    editTask,
   }
 });
 
