@@ -13,6 +13,7 @@ router.post('/', (req, res) => {
   if (!name) return res.status(400).json({ error: 'Task name required' })
   
   const newTask = {
+    userId,
     id: uuidv4(),
     name,
     completed: false,

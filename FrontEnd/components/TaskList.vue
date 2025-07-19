@@ -6,7 +6,10 @@
       name="fade"
       class="item-list"
     >
-      <li v-for="task in activeTasks" :key="task.id" class="list-item-box container">
+      <li v-for="task in activeTasks" 
+        :key="task.id" 
+        class="list-item-box container"
+      >
         <div class="list-item">
           <input
             type="checkbox"
