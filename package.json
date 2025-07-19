@@ -10,6 +10,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "pinia": "^3.0.3"
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "pinia": "^3.0.3",
+    "uuid": "^11.1.0"
   }
 }
