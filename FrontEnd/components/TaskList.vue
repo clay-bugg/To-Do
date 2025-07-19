@@ -66,24 +66,25 @@ const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = ta
 /*---Task List---*/
 .task-list {
   width: 100%;
-  padding: 25px;
   height: 100%;
+  padding: 25px;
 }
 .item-list {
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
 }
 /*---List Item---*/
 .list-item-box {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 100%;
+  justify-content: space-between;
   gap: 2px;
+  width: 100%;
   height: 50px;
   padding: 0 15px;
 }
@@ -91,38 +92,36 @@ const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = ta
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: fit-content;
   gap: 16px;
+  width: fit-content;
   font-size: 0.9rem;
 }
 .completed-list-item {
+  color: var(--placeholdergrey);
   text-decoration: line-through;
-  color: var(--placeholdergrey)
 }
 .task-edit-input {
-  height: 100%;
+  position: relative;
+  right: 6px;
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
+  height: 100%;
+  padding: 0 5px;
   border: 0.5px solid black;
   border-radius: 5px;
   font-weight: 300;
-  padding: 0 5px;
   font-size: 20px;
-  position: relative;
-  right: 6px;
 }
 /*---Checkbox---*/
 .checkbox {
-  width: 18px;
-  height: 18px;
-  background-color: var(--mainwhite);
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 18px;
+  height: 18px;
+  background-color: var(--mainwhite);
   cursor: pointer;
-  background-color: var(--offwhite);
-
 }
 .checkbox:checked {
   accent-color: var(--maingrey);
@@ -134,27 +133,24 @@ const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = ta
   opacity: 0;
 }
 .checkbox-checked {
-  width: 20px;
-  height: 20px;
-  border-radius: 50px;
-  background-color: var(--mainwhite);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgb(51, 97, 188);
+  width: 20px;
+  height: 20px;
+  background-color: var(--mainwhite);
+  border-radius: 50px;
 }
 /*---List Buttons---*/
 .list-item-buttons {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: fit-content;
   gap: 8px;
+  width: fit-content;
   height: 100%;
 }
 .list-item-button {
-  height: 28px;
-  width: 28px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -163,6 +159,8 @@ const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = ta
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 28px;
+  width: 28px;
 }
 .list-item-button:hover {
   transform: scale(1.1);

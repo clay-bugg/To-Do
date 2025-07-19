@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <Button v-for="b in props.buttons" :id="b" :label="String(b)" @click="handleUserDetails(String(b))" />
+    <Button v-for="b in props.buttons" :key="b" :label="String(b)" @click="handleUserDetails(String(b))" />
   </div>
   <!--Login Box-->
   <div class="login-panel container" :class="{ 'active': loginBox === true }">
@@ -155,11 +155,13 @@ function closeForm(button: string) {
   transition: all 0.2s ease-in;
   opacity: 0;
   z-index: 2;
+  pointer-events: none;
 
 }
 .active {
   transform: translateY(0%);
   opacity: 1;
+  pointer-events: all;
 }
 .close-form-button {
   position: absolute;
