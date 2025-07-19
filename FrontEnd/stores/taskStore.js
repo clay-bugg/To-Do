@@ -1,20 +1,20 @@
 //---Imports---//
+import { ref } from 'vue'
+import { defineStore } from 'pinia'
 import { nanoid } from 'nanoid'
-import { ref } from 'vue';
-import { defineStore } from 'pinia';
 
 export const useTaskStore = defineStore('task', () => {
   //--Constants--//
-  const tasks = ref<{ id: string; name: string; editing: boolean; checked: boolean }[]>([]);
-  const completedTasks = ref<{ id: string; name: string; editing: boolean; checked: boolean }[]>([]);
-  const deletedTasks = ref<{ id: string; name: string; editing: boolean; checked: boolean }[]>([]);
+  const tasks = ref([])
+  const completedTasks = ([])
+  const deletedTasks = ref([])
   
   //---Functions---//
-  function addTask(name: string) { 
+  function addTask(name) { 
     if (!name) return;
     tasks.value.push({ id: nanoid(), name, editing: false, checked: false });
   }
-  function completeTask(id: string) { 
+  function completeTask(id) { 
     if (!id) return;
     const i = tasks.value.findIndex(task => task.id === id);
     if (i === -1) return;
@@ -22,27 +22,27 @@ export const useTaskStore = defineStore('task', () => {
     task.checked = true;
     completedTasks.value.push(task); 
   }
-  function deleteTask(id: string) { 
+  function deleteTask(id) { 
     if (!id) return;
     const i = tasks.value.findIndex(task => task.id === id);
     if (i === -1) return;
     const [task] = tasks.value.splice(i, 1);
     deletedTasks.value.push(task);
   }
-  function deleteCompletedTask(id: string) {
+  function deleteCompletedTask(id) {
     const i = completedTasks.value.findIndex(task => task.id === id);
     if (i === -1) return;
     const [task] = completedTasks.value.splice(i, 1);
     deletedTasks.value.push(task);
   }
-  function undoTask(id: string) { 
+  function undoTask(id) { 
     const i = completedTasks.value.findIndex((task) => task.id === id);
     if (i === -1) return;
     const [task] = completedTasks.value.splice(i, 1);
     task.checked = false;
     tasks.value.push(task);
   }
-  function editTask(id: string) { 
+  function editTask(id) { 
     const i = tasks.value.findIndex((task) => task.id === id);
     if (i === -1) return;
     const task = tasks.value[i];
