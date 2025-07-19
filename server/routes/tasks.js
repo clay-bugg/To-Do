@@ -26,6 +26,23 @@ router.post('/', (req, res) => {
   res.status(201).json(newTask)
 })
 
+router.patch('/:id', (req, res) => { 
+  const id = req.params.id
+  const { name, completed } = req.body
+
+  const task = tasks.find(task => task.id === id)
+  if (!task) return res.status(404).json({ error: 'Task not found' })
+ 
+  if (typeof completed === 'boolean') { 
+    task.completed = completed
+  }
+  if (typeof name === 'string' && name.trim() !== '') { 
+    task.name = name.trim()
+  }
+
+  res.json(task)
+})
+
 router.delete('/:id', (req, res) => { 
   const id = req.params.id
   const index = tasks.findIndex(task => task.id === id)
