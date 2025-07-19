@@ -1,5 +1,5 @@
 <template>
-  <div v-show="listStore.selectedListType === 'tasks'" class="new-task">
+  <div v-show="selectedListType === 'tasks'" class="new-task">
     <input class="new-task-input container" v-model="newTask" placeholder="Add New Task" />
     <button class="new-task-button" @click="add()" title="Add">
       <Icon name="iconoir:plus-square-solid" id="add-icon" />
@@ -8,13 +8,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { useTaskStore } from '@/stores/taskStore';
-import { useListTypeStore } from '@/stores/listTypeStore';
+import { ref, onMounted, onUnmounted } from 'vue'
+import { storeToRefs } from 'pinia'
 
-const taskStore = useTaskStore();
-const listStore = useListTypeStore();
-const newTask = ref('');
+const { addTask } = useTaskStore();
+const { selectedListType } = storeToRefs(useListTypeStore());
+
+let newTask = ref('')
 
 function enterPressed(e) {
   if (e.key === 'Enter') {
@@ -23,7 +23,7 @@ function enterPressed(e) {
 }
 function add() {
   if (!newTask.value) return;
-  taskStore.addTask(newTask.value);
+  addTask(newTask.value);
   newTask.value = '';
 }
 onMounted(() => {

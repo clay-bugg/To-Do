@@ -48,18 +48,14 @@
 
 <script setup>
 /*---Imports---*/
-import { useListTypeStore } from '~/stores/listTypeStore'
-import { useTaskStore } from '~/stores/taskStore'
 import { ref, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 
 /*---Stores---*/
-const taskStore = useTaskStore()
-const listStore = useListTypeStore()
-const { tasks, completedTasks } = storeToRefs(taskStore)
-const { selectedListType } = storeToRefs(listStore)
+const { tasks, completedTasks } = storeToRefs(useTaskStore())
+const { selectedListType } = storeToRefs(useListTypeStore())
 
-const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = taskStore
+const { completeTask, deleteTask, deleteCompletedTask, undoTask, editTask } = useTaskStore()
 </script>
 
 <style scoped>

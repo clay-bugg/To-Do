@@ -8,7 +8,6 @@
 
 <script setup>
 import { storeToRefs } from 'pinia'
-import { useListTypeStore } from '~/stores/listTypeStore';
 
 const { selectedListType } = storeToRefs(useListTypeStore())
 const { select } = useListTypeStore()

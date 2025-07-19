@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid'
 export const useTaskStore = defineStore('task', () => {
   //--Constants--//
   const tasks = ref([])
-  const completedTasks = ([])
+  const completedTasks = ref([])
   const deletedTasks = ref([])
   
   //---Functions---//
