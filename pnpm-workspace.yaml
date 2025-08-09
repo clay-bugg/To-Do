@@ -1,0 +1,8 @@
+packages:
+  - frontend
+  - server
+
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - better-sqlite3
+  - esbuild

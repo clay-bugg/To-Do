@@ -1,0 +1,692 @@
+index.js: import express from 'express'
+import cors from 'cors'
+import tasksRoutes from './routes/tasks.js'
+import usersRoutes from './routes/users.js'
+
+const app = express()
+const PORT = 3001
+
+//Middleware
+app.use(cors())
+app.use(express.json())
+
+//Routes
+app.use('/api/tasks', tasksRoutes)
+app.use('/api/users', usersRoutes)
+
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`)
+})
+
+usersRoutes.js import express from 'express'
+import { v4 as uuidv4 } from 'uuid'
+const router = express.Router()
+
+const users = []
+
+router.get('/', (req, res) => {
+  res.json(users)
+})
+
+router.post('/signup', (req, res) => {
+  const username = req.body.username?.trim().toLowerCase()
+  const password = req.body.password?.trim()
+
+  if (!username || !password) {
+    return res
+      .status(400)
+      .json({ error: 'Both username and password are required' })
+  }
+
+  const existingUser = users.find(
+    (user) => user.username.toLowerCase() === username.toLowerCase()
+  )
+  if (existingUser) {
+    return res.status(409).json({ error: 'Username already in use' })
+  }
+
+  const newUser = {
+    userId: uuidv4(),
+    username,
+    password,
+  }
+
+  users.push(newUser)
+  res.status(201).json({
+    id: newUser.userId,
+    username: newUser.username,
+  })
+})
+
+router.post('/login', (req, res) => {
+  const { username, password } = req.body
+
+  const user = users.find(
+    (user) =>
+      user.username.toLowerCase() === username.toLowerCase() &&
+      user.password === password
+  )
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid credentials' })
+  }
+
+  res.json({ id: user.userId, username: user.username })
+})
+
+export default router
+
+tasks.js:
+
+import express from 'express'
+import { v4 as uuidv4 } from 'uuid'
+const router = express.Router()
+
+let tasks = []
+
+//GET/api/tasks?userId=xxx
+router.get('/', (req, res) => {
+  const { userId } = req.query
+  if (!userId) return res.status(400).json({ error: 'Missing User Id' })
+  const userTasks = tasks.filter((task) => task.userId === userId)
+  res.json(userTasks)
+})
+//POST/api/tasks
+router.post('/', (req, res) => {
+  const { name, userId } = req.body
+  if (!name || !userId)
+    return res.status(400).json({ error: 'Task name and user id required' })
+
+  const newTask = {
+    id: uuidv4(),
+    name,
+    completed: false,
+    userId,
+  }
+
+  tasks.push(newTask)
+  res.status(201).json(newTask)
+})
+//PATCH/api/tasks/:id
+router.patch('/:id', (req, res) => {
+  const { id } = req.params
+  const { name, completed, userId } = req.body
+
+  const task = tasks.find((task) => task.id === id)
+  if (!task) return res.status(404).json({ error: 'Task not found' })
+
+  if (task.userId !== userId)
+    return res.status(403).json({ error: 'Unauthorized' })
+
+  if (typeof completed === 'boolean') {
+    task.completed = completed
+  }
+  if (typeof name === 'string' && name.trim() !== '') {
+    task.name = name.trim()
+  }
+
+  res.json(task)
+})
+//DELETE/api/tasks/:id
+router.delete('/:id', (req, res) => {
+  const { id } = req.params
+  const { userId } = req.body
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Task not found' })
+  }
+  const index = tasks.findIndex((task) => task.id === id)
+  if (tasks[index].userId !== userId)
+    return res.status(403).json({ error: 'Unauthorized' })
+
+  const deletedTask = tasks.splice(index, 1)[0]
+  res.json(deletedTask)
+})
+
+export default router
+db/index.js
+const db = new Database('./db/database.db')
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      completed INTEGER DEFAULT 0,
+      userId TEXT NOT NULL,
+      FOREIGN KEY(userId) REFERENCES users(id)
+    )
+  `)
+
+export default db
+  
+front end 
+
+
+
+stores / taskStore.js 
+//---Imports---//
+import { ref } from 'vue' // Removed 'computed' and 'storeToRefs' as we don't need them at the top level
+import { defineStore } from 'pinia'
+import { useUserStore } from '@/stores/userStore.js' // Import the user store
+
+export const useTaskStore = defineStore('task', () => {
+  const tasks = ref([])
+  const apiUrl = 'http://localhost:3001/api/tasks'
+
+  // --- Actions ---
+
+  // GET/api/tasks
+  async function fetchTasks() {
+    // Access the user store inside the action
+    const userStore = useUserStore()
+    const uid = userStore.user?.id
+
+    if (!uid) {
+      console.error('No user logged in - cannot fetch tasks')
+      return
+    }
+    try {
+      const res = await fetch(`${apiUrl}?userId=${uid}`)
+      if (!res.ok) throw await res.json()
+      tasks.value = await res.json()
+      console.log('User tasks fetched successfully', uid)
+    } catch (err) {
+      console.error('Failed to fetch user tasks:', err)
+    }
+  }
+
+  // POST/api/tasks
+  async function addTask(name) {
+    // Access the user store inside the action
+    const userStore = useUserStore()
+    const uid = userStore.user?.id
+
+    if (!uid) {
+      console.error('No user logged in - cannot add task')
+      return
+    }
+    const payload = { name, userId: uid }
+    console.log('addTask payload:', payload)
+    try {
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (!res.ok) throw await res.json()
+      const newTask = await res.json()
+      tasks.value.push(newTask)
+      console.log(`'${name}' added to tasks`)
+    } catch (err) {
+      console.error('Failed to add task:', err)
+    }
+  }
+
+  // PATCH/api/tasks/:id
+  async function updateTask(id, updates) {
+    // Access the user store inside the action
+    const userStore = useUserStore()
+    const uid = userStore.user?.id
+
+    if (!uid) {
+      console.error('No user logged in - cannot update task')
+      return
+    }
+    const payload = { ...updates, userId: uid }
+    try {
+      const res = await fetch(`${apiUrl}/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      const updatedTask = await res.json()
+      const index = tasks.value.findIndex((task) => task.id === id)
+      if (index !== -1) {
+        tasks.value[index] = updatedTask
+        console.log('Task updated:', updatedTask)
+      }
+    } catch (err) {
+      console.error('Failed to update task:', err)
+    }
+  }
+
+  // DELETE/api/tasks/:id
+  async function deleteTask(id) {
+    // Access the user store inside the action
+    const userStore = useUserStore()
+    const uid = userStore.user?.id
+
+    if (!uid) {
+      console.error('No user logged in-cannot delete task')
+    }
+    try {
+      const res = await fetch(`${apiUrl}/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: uid }),
+      })
+      if (!res.ok) throw await res.json()
+      const deleted = await res.json()
+      tasks.value = tasks.value.filter((task) => task.id !== deleted.id)
+      console.log('Task deleted:', deleted)
+    } catch (err) {
+      console.error('Failed to delete task:', err)
+    }
+  }
+
+  return {
+    tasks,
+    fetchTasks,
+    addTask,
+    updateTask,
+    deleteTask,
+  }
+})
+stores/userStore.js import { ref } from 'vue'
+import { defineStore } from 'pinia'
+
+export const useUserStore = defineStore('user', () => {
+  const user = ref(null)
+  const apiUrl = 'http://localhost:3001/api/users'
+
+  //POST/api/users
+  async function login(username, password) {
+    try {
+      const res = await fetch(`${apiUrl}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+
+      if (!res.ok) throw await res.json()
+      const data = await res.json()
+      user.value = data
+      console.log('User logged in:', data)
+    } catch (err) {
+      console.error('Login failed:', err.error || err.message)
+  }
+}
+
+  //POST/api/users
+  async function signup(username, password) { 
+    try {
+      const res = await fetch(`${apiUrl}/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+
+      if (!res.ok) throw await res.json()
+      const data = await res.json()
+      user.value = data
+      console.log('User signed up succesfully:', data)
+    } catch (err) { 
+      console.error('Signup failed:', err.error || err.message)
+    }
+  }
+  //Logout
+  function logout() { 
+    let user = user.value
+    console.log(`${user} logged out`)
+    user.value = null
+  }
+  
+  return {
+    user,
+    signup,
+    login,
+    logout
+  }
+})
+stores/listTypeStore.js import { ref, computed } from 'vue';
+import { defineStore } from 'pinia';
+
+export const useListTypeStore = defineStore('listType', () => {
+  const tasks = ref('tasks');
+  const completed = ref('completed');
+  const selectedListType = ref('tasks');
+
+  const active = computed(() => {
+    return selectedListType.value === 'tasks' ? tasks.value : completed.value;
+  });
+
+  function select(listType) {
+    selectedListType.value = listType;
+    console.log(`List type changed to ${listType}`)
+  }
+
+  return {
+    tasks,
+    completed,
+    selectedListType,
+    active,
+    select,
+  };
+});
+
+app.vue <template>
+  <div class="page">
+    <div class="app">
+      <Header />
+      <Greeting />
+      <div class="todo-list container">
+        <MenuButtons :list-change="changeListType" />
+        <NewTaskInput />
+        <TaskList :list="selectedList" :taskList="taskList" />
+        <ToggleSwitch />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, defineEmits, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+
+const { fetchTasks } = useTaskStore()
+const { user } = storeToRefs(useUserStore())
+
+onMounted(() => { 
+  fetchTasks()
+  if (!user) { 
+    console.log('No user logged in')
+  }
+})
+
+const selectedList = ref('tasks')
+
+function changeListType(val) { 
+  selectedList.value = val
+}
+</script>
+
+<style scoped>
+.page {
+ width: 100vw;
+ height: 100vh;
+ margin: 0 auto;
+}
+.app{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  align-items: flex-end;
+  justify-content: center;
+}
+.todo-list {
+  height: 700px;
+  width: 550px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border-radius: 15px;
+  padding: 35px 35px 20px;
+  background-color: var(--offwhite);
+  margin: 0 auto;
+}
+</style>
+
+TaskList.vue <template>
+  <div class="task-list container">
+    <transition-group
+      v-if="selectedListType === 'tasks'"
+      tag="ul"
+      name="fade"
+      class="item-list"
+    >
+      <li v-for="task in activeTasks" 
+        :key="task.id" 
+        class="list-item-box container"
+      >
+        <div class="list-item">
+          <input
+            type="checkbox"
+            :class="['checkbox', { checked: task.completed }]"
+            @change="updateTask(task.id, { completed: !task.completed })"
+            :checked="task.completed"
+          />
+          <input
+            v-if="editingId === task.id"
+            v-model="editedName"
+            @keyup.enter="submitEdit(task)"
+            @blur="submitEdit(task)"
+            class="task-edit-input"
+          />
+          <p v-else @dblclick="startEditing(task)" class="task-name">
+            {{ task.name }}
+          </p>
+        </div>
+        <div class="list-item-buttons">
+          <button
+            class="list-item-button edit-button"
+            @click="editingId === task.id ? submitEdit(task) : startEditing(task)"
+            title="Edit"
+          >
+            <Icon
+              v-if="editingId === task.id"
+              name="ph:check-fat-fill"
+              class="button-icon"
+              id="tick-icon"
+            />
+            <Icon
+              v-else
+              name="clarity:edit-solid"
+              class="button-icon"
+              id="edit-icon"
+            />
+          </button>
+
+          <button
+            class="list-item-button delete-button"
+            @click="deleteTask(task.id)"
+            id="bin-icon"
+            title="Delete"
+          >
+            <Icon name="mdi:bin" class="button-icon" />
+          </button>
+        </div>
+      </li>
+    </transition-group>
+
+    <transition-group
+      tag="ul"
+      v-if="selectedListType === 'completed'"
+      name="fade"
+      class="item-list"
+    >
+      <li v-for="task in completedTasks" :key="task.id" class="list-item-box container">
+        <div class="list-item completed-list-item">
+          <p>{{ task.name }}</p>
+        </div>
+        <div class="list-item-buttons">
+          <button
+            class="list-item-button undo-button"
+            @click="updateTask(task.id, { completed: !task.completed })"
+            id="undo-icon"
+            title="Undo"
+          >
+            <Icon name="fa:undo" class="button-icon" />
+          </button>
+          <button
+            class="list-item-button delete-button"
+            @click="deleteTask(task.id)"
+            id="bin-icon"
+            title="Delete"
+          >
+            <Icon name="mdi:bin" class="button-icon" />
+          </button>
+        </div>
+      </li>
+    </transition-group>
+  </div>
+</template>
+
+<script setup>
+/*---Imports---*/
+import { ref, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+
+/*---Stores---*/
+const { tasks } = storeToRefs(useTaskStore());
+const { selectedListType } = storeToRefs(useListTypeStore());
+const { updateTask, deleteTask } = useTaskStore();
+/*---Variables---*/
+const activeTasks = computed(() => tasks.value.filter(t => !t.completed))
+const completedTasks = computed(() => tasks.value.filter(t => t.completed))
+const editingId = ref(null);
+const editedName = ref("");
+/*---Functions---*/
+function startEditing(task) {
+  editingId.value = task.id;
+  editedName.value = task.name;
+  console.log(`${task.name} editing`)
+}
+function cancelEditing() {
+  editingId.value = null;
+  editedName.value = "";
+}
+function submitEdit(task) {
+  const trimmed = editedName.value.trim();
+  if (trimmed && trimmed !== task.name) {
+    updateTask(task.id, { name: trimmed })
+  }
+  cancelEditing();
+}
+</script>
+
+<style scoped>
+/*---Task List---*/
+.task-list {
+  width: 100%;
+  height: 100%;
+  padding: 25px;
+}
+.item-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+}
+/*---List Item---*/
+.list-item-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+  width: 100%;
+  height: 50px;
+  padding: 0 15px;
+}
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: fit-content;
+  font-size: 0.9rem;
+}
+.completed-list-item {
+  color: var(--placeholdergrey);
+  text-decoration: line-through;
+}
+.task-edit-input {
+  position: relative;
+  right: 6px;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  height: 100%;
+  padding: 0 5px;
+  border: 0.5px solid black;
+  border-radius: 5px;
+  font-weight: 300;
+  font-size: 20px;
+}
+/*---Checkbox---*/
+.checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background-color: var(--mainwhite);
+  cursor: pointer;
+}
+.checkbox:checked {
+  accent-color: var(--maingrey);
+  pointer-events: none;
+}
+.checkbox-icon {
+  display: none;
+  appearance: none;
+  opacity: 0;
+}
+.checkbox-checked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: var(--mainwhite);
+  border-radius: 50px;
+}
+/*---List Buttons---*/
+.list-item-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: fit-content;
+  height: 100%;
+}
+.list-item-button {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  width: 28px;
+}
+.list-item-button:hover {
+  transform: scale(1.1);
+}
+#undo-icon {
+  padding: 2px;
+}
+#edit-icon {
+  width: 100%;
+  height: 100%;
+}
+.edit-button {
+  height: 26px;
+  width: 26px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.button-icon {
+  height: 100%;
+  width: 100%;
+}
+/*---Animations---*/
+.fade-leave-active {
+  transition: all 1s ease-in;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
