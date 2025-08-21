@@ -1,52 +1,63 @@
+// stores/userStore.js
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
+// safe storage for SSR
+const safeStorage = typeof window !== 'undefined'
+  ? window.localStorage
+  : { getItem: () => null, setItem: () => {}, removeItem: () => {} }
+
 export const useUserStore = defineStore('user', () => {
-  const user = ref(null)
   const apiUrl = 'http://localhost:3001/api/users'
+  const user = ref(null)
+  const token = ref(safeStorage.getItem('token'))
+
+  function setToken(val) {
+    token.value = val
+    if (val) safeStorage.setItem('token', val)
+    else safeStorage.removeItem('token')
+  }
 
   async function signup(username, password) {
-    try {
-      const res = await fetch(`${apiUrl}/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      })
-
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Signup failed')
-
-      user.value = data
-      console.log('User signed up successfully:', data)
-    } catch (err) {
-      console.error('Signup failed:', err.message)
-    }
+    const res = await fetch(`${apiUrl}/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Signup failed')
+    user.value = data // { id, username }
   }
 
   async function login(username, password) {
-    try {
-      const res = await fetch(`${apiUrl}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      })
-
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Login failed')
-
-      user.value = data
-      console.log('User logged in:', data)
-    } catch (err) {
-      console.error('Login failed:', err.message)
-    }
+    const res = await fetch(`${apiUrl}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Login failed')
+    user.value = { id: data.id, username: data.username }
+    setToken(data.token || null)
   }
 
   function logout() {
     user.value = null
-    console.log('User logged out')
+    setToken(null)
   }
 
-  return { user, signup, login, logout }
+  // helper for auth headers
+  function authHeaders() {
+    return token.value ? { Authorization: `Bearer ${token.value}` } : {}
+  }
+
+  return { user, token, signup, login, logout, authHeaders }
 }, {
-  persist: true,
+  persist: {
+    storage: safeStorage,
+    paths: ['user', 'token']
+  }
 })
+js
+Copy
+Edit

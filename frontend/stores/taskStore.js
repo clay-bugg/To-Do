@@ -1,91 +1,69 @@
-import { ref } from 'vue'
+// stores/taskStore.js
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useUserStore } from './userStore'
+
+// safe storage for SSR
+const safeStorage = typeof window !== 'undefined'
+  ? window.localStorage
+  : { getItem: () => null, setItem: () => {}, removeItem: () => {} }
 
 export const useTaskStore = defineStore('task', () => {
   const tasks = ref([])
   const apiUrl = 'http://localhost:3001/api/tasks'
-
   const userStore = useUserStore()
+  const userId = computed(() => userStore.user?.id)
+
+  const auth = () => userStore.authHeaders()
 
   async function fetchTasks() {
-    try {
-      const url = `${apiUrl}?userId=${encodeURIComponent(userStore.user.id)}`
-      const res = await fetch(url)
-      if (!res.ok) throw new Error(`Fetch failed: ${res.status}`)
-      tasks.value = await res.json()
-      console.log('Tasks database fetched successfully')
-    } catch (err) {
-      console.error('Failed to fetch tasks:', err)
-    }
+    if (!userId.value) { tasks.value = []; return }
+    const res = await fetch(`${apiUrl}?userId=${encodeURIComponent(userId.value)}`, {
+      headers: { Accept: 'application/json', ...auth() }
+    })
+    if (!res.ok) throw new Error(`Fetch failed: ${res.status}`)
+    tasks.value = await res.json()
   }
 
   async function addTask(name) {
-    try {
-      const res = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: userStore.user.id,
-          name
-        })
-      })
-      if (!res.ok) throw new Error(`Add failed: ${res.status}`)
-      const newTask = await res.json()
-      tasks.value.push(newTask)
-      console.log(`'${name}' added to tasks`)
-    } catch (err) {
-      console.error('Failed to add task:', err)
-    }
+    if (!userId.value) throw new Error('addTask: no user')
+    const res = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...auth() },
+      body: JSON.stringify({ userId: userId.value, name })
+    })
+    if (!res.ok) throw new Error(`Add failed: ${res.status}`)
+    tasks.value.push(await res.json())
   }
 
   async function updateTask(id, updates) {
-    try {
-      const res = await fetch(`${apiUrl}/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: userStore.user.id,
-          ...updates
-        })
-      })
-      if (!res.ok) throw new Error(`Update failed: ${res.status}`)
-      const updatedTask = await res.json()
-      const index = tasks.value.findIndex(task => task.id === id)
-      if (index !== -1) {
-        const oldTask = { ...tasks.value[index] }
-        tasks.value[index] = updatedTask
-        console.log('Task updated from', oldTask, 'to', updatedTask)
-      }
-    } catch (err) {
-      console.error('Failed to update task:', err)
-    }
+    if (!userId.value) throw new Error('updateTask: no user')
+    const res = await fetch(`${apiUrl}/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...auth() },
+      body: JSON.stringify({ userId: userId.value, ...updates })
+    })
+    if (!res.ok) throw new Error(`Update failed: ${res.status}`)
+    const updated = await res.json()
+    const i = tasks.value.findIndex(t => t.id === id)
+    if (i !== -1) tasks.value[i] = updated
   }
 
   async function deleteTask(id) {
-    try {
-      const res = await fetch(`${apiUrl}/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId: userStore.user.id
-        })
-      })
-      if (!res.ok) throw new Error(`Delete failed: ${res.status}`)
-      tasks.value = tasks.value.filter(task => task.id !== id)
-      console.log('Task deleted')
-    } catch (err) {
-      console.error('Failed to delete task:', err)
-    }
+    if (!userId.value) throw new Error('deleteTask: no user')
+    const res = await fetch(`${apiUrl}/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json', ...auth() },
+      body: JSON.stringify({ userId: userId.value })
+    })
+    if (!res.ok) throw new Error(`Delete failed: ${res.status}`)
+    tasks.value = tasks.value.filter(t => t.id !== id)
   }
 
-  return {
-    fetchTasks,
-    tasks,
-    addTask,
-    updateTask,
-    deleteTask
-  }
+  return { tasks, fetchTasks, addTask, updateTask, deleteTask }
 }, {
-  persist: true
+  persist: {
+    storage: safeStorage,
+    paths: ['tasks']
+  }
 })

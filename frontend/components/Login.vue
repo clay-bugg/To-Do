@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+  <div class="login-box">
     <Button v-for="b in props.buttons" :key="b" :label="String(b)" @click="handleUserDetails(String(b))" />
   </div>
   <!--Login Box-->
@@ -32,6 +33,7 @@
 
     <div v-if="signupError" style="color: red">{{ signupError }}</div>
     <div v-if="signupSuccess" style="color: green">{{ signupSuccess }}</div>
+  </div>
   </div>
 </template>
 
@@ -121,7 +123,7 @@ function closeForm(button) {
 </script>
 
 <style scoped>
-.login {
+.login-box {
   display: flex;
   align-items: center;
   gap: 10px;
