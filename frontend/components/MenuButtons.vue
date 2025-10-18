@@ -30,7 +30,7 @@ const { select } = listType
     border-radius: 5px;
     font-size: 0.9rem;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 - 2px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 -3px 2px  rgba(0,0,0,0.2);
     font-family: inherit;
     font-weight: 300;
     &.active {

@@ -58,6 +58,5 @@ export const useUserStore = defineStore('user', () => {
     paths: ['user', 'token']
   }
 })
-js
-Copy
-Edit
+
+
