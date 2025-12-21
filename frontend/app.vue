@@ -12,18 +12,6 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, onMounted } from 'vue'
-/*const { fetchTasks } = useTaskStore()*/
-
-/*onMounted(() => {
-  fetchTasks()
-})*/
-
-const selectedList = ref('tasks')
-
-function changeListType(val) {
-  selectedList.value = val
-}
 </script>
 
 <style scoped>

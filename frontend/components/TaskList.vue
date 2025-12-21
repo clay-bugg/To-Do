@@ -1,5 +1,6 @@
 <template>
   <div class="task-list container">
+    
     <transition-group
       v-if="selectedListType === 'tasks'"
       tag="ul"
@@ -7,16 +8,16 @@
       class="item-list"
     >
       <li v-for="task in activeTasks" 
-        :key="task.id" 
+        :key="task.id"
         class="list-item-box container"
       >
         <div class="list-item">
-          <input
-            type="checkbox"
-            :class="['checkbox', { checked: task.completed }]"
-            @change="updateTask(task.id, { completed: !task.completed })"
-            :checked="task.completed"
-          />
+     <input
+       type="checkbox"
+       :class="['checkbox', { checked: task.completed }]"
+       @change="updateTask(task.id, { completed: !task.completed })"
+       />
+          
           <input
             v-if="editingId === task.id"
             v-model="editedName"
@@ -24,11 +25,15 @@
             @blur="submitEdit(task)"
             class="task-edit-input"
           />
+
           <p v-else @dblclick="startEditing(task)" class="task-name">
             {{ task.name }}
           </p>
+
         </div>
+
         <div class="list-item-buttons">
+
           <button
             class="list-item-button edit-button"
             @click="editingId === task.id ? submitEdit(task) : startEditing(task)"
@@ -54,6 +59,7 @@
             id="bin-icon"
             title="Delete"
           >
+          
             <Icon name="mdi:bin" class="button-icon" />
           </button>
         </div>
@@ -90,48 +96,55 @@
         </div>
       </li>
     </transition-group>
+
   </div>
 </template>
 
 <script setup>
-/*---Imports---*/
-import { ref, onMounted } from "vue";
-import { storeToRefs } from "pinia";
+//---Imports---//
+import { nanoid } from 'nanoid'
+import Task  from '../task.js'
 
-/*---Stores---*/
-const { tasks } = storeToRefs(useTaskStore());
-const { selectedListType } = storeToRefs(useListTypeStore());
-const { updateTask, deleteTask } = useTaskStore();
-/*---Variables---*/
-const activeTasks = computed(() => tasks.value.filter(t => !t.completed))
-const completedTasks = computed(() => tasks.value.filter(t => t.completed))
-const editingId = ref(null);
-const editedName = ref("");
-/*---Functions---*/
+//---Stores---//
+const { activeTasks, selectedListType, completedTasks } = storeToRefs(useTaskStore())
+const { updateTask, deleteTask } = useTaskStore()
+
+//---Variables---//
+const editingId = ref(null)
+const editedName = ref("")
+const id = nanoid()
+
+//---Functions---//
 function startEditing(task) {
-  editingId.value = task.id;
-  editedName.value = task.name;
+  editingId.value = task.idc
+  editedName.value = task.name
 }
+
+//---Cancel Editing---*/
 function cancelEditing() {
-  editingId.value = null;
-  editedName.value = "";
+  editingId.value = null
+  editedName.value = task.name
 }
+
 function submitEdit(task) {
-  const trimmed = editedName.value.trim();
+  const trimmed = editedName.value.trim()
   if (trimmed && trimmed !== task.name) {
-    updateTask(task.id, { name: trimmed });
+    updateTask(task.id, { name: trimmed })
   }
-  cancelEditing();
+  cancelEditing()
 }
 </script>
 
 <style scoped>
+
 /*---Task List---*/
+
 .task-list {
   width: 100%;
   height: 100%;
   padding: 25px;
 }
+
 .item-list {
   display: flex;
   flex-direction: column;
@@ -141,7 +154,9 @@ function submitEdit(task) {
   width: 100%;
   height: 100%;
 }
+
 /*---List Item---*/
+
 .list-item-box {
   display: flex;
   align-items: center;
@@ -151,6 +166,7 @@ function submitEdit(task) {
   height: 50px;
   padding: 0 15px;
 }
+
 .list-item {
   display: flex;
   align-items: center;
@@ -159,10 +175,12 @@ function submitEdit(task) {
   width: fit-content;
   font-size: 0.9rem;
 }
+
 .completed-list-item {
   color: var(--placeholdergrey);
   text-decoration: line-through;
 }
+
 .task-edit-input {
   position: relative;
   right: 6px;
@@ -176,6 +194,7 @@ function submitEdit(task) {
   font-weight: 300;
   font-size: 20px;
 }
+
 /*---Checkbox---*/
 .checkbox {
   display: flex;
@@ -186,15 +205,18 @@ function submitEdit(task) {
   background-color: var(--mainwhite);
   cursor: pointer;
 }
+
 .checkbox:checked {
   accent-color: var(--maingrey);
   pointer-events: none;
 }
+
 .checkbox-icon {
   display: none;
   appearance: none;
   opacity: 0;
 }
+
 .checkbox-checked {
   display: flex;
   align-items: center;
@@ -204,7 +226,9 @@ function submitEdit(task) {
   background-color: var(--mainwhite);
   border-radius: 50px;
 }
+
 /*---List Buttons---*/
+
 .list-item-buttons {
   display: flex;
   align-items: center;
@@ -213,6 +237,7 @@ function submitEdit(task) {
   width: fit-content;
   height: 100%;
 }
+
 .list-item-button {
   appearance: none;
   -webkit-appearance: none;
@@ -225,16 +250,20 @@ function submitEdit(task) {
   height: 28px;
   width: 28px;
 }
+
 .list-item-button:hover {
   transform: scale(1.1);
 }
+
 #undo-icon {
   padding: 2px;
 }
+
 #edit-icon {
   width: 100%;
   height: 100%;
 }
+
 .edit-button {
   height: 26px;
   width: 26px;
@@ -247,15 +276,20 @@ function submitEdit(task) {
   align-items: center;
   justify-content: center;
 }
+
 .button-icon {
   height: 100%;
   width: 100%;
 }
+
 /*---Animations---*/
+
 .fade-leave-active {
   transition: all 1s ease-in;
 }
+
 .fade-leave-to {
   opacity: 0;
 }
+
 </style>
