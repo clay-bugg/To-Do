@@ -6,6 +6,8 @@
     "nanoid": "^5.1.6"
   },
   "devDependencies": {
-    "nuxt": "^4.2.2"
+    "nuxt": "^4.2.2",
+    "sass": "^1.97.1"
   }
 }
+

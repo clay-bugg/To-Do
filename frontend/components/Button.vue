@@ -15,7 +15,6 @@ const props = defineProps({
 </script>
 
 <style scoped>
-/* From Uiverse.io by satyamchaudharydev */ 
 button {
   --arrow-width: 10px;
   --arrow-stroke: 2px;

@@ -1,7 +1,5 @@
-/* assets/css/main.css - Nuxt CSS template */
-
-
 @import url('https://fonts.googleapis.com/css?family=Inter:100,200,300,400,500,600,700,800,900&display=swap');
+
 :root {
   --maingrey: #333333;
   --mainwhite: #FFFFFF;
@@ -11,6 +9,8 @@
   --logingreen: #3cbd3c;
   --signupblue: #446cc8;
 }
+
+
 *,
 *::before,
 *::after {
@@ -18,26 +18,32 @@
   margin: 0;
   padding: 0;
 }
+
 html {
   font-size: 24px;
 }
+
 body {
   font-family: var(--mainfont);
   color: #222;
   min-height: 100vh;
   font-weight: 300;
 }
+
 button:hover {
   cursor: pointer;
   filter: brightness(96%);
 }
+
 input,
 button {
   font-family: inherit;
 }
+
 input[type="text"] {
   cursor: text;
 }
+
 .container {
   border: 2px solid rgba(0, 0, 0, 0.2);
   border-radius: 5px;

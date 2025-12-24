@@ -1,12 +1,17 @@
 class Task {
-  constructor(name, id, completed = false, editing = false) {
-    this.name = name
-    this.id = id
-    this.completed = completed
-    this.editing = editing
+  constructor(id, name, completed = false) {
+    this.id = id;
+    this.name = name;
+    this.completed = completed;
+  }
+
+  toggle() {
+    this.completed = !this.completed;
+  }
+
+  rename(newName) {
+    this.name = newName;
   }
 }
 
-export default Task
-
-
+export default Task;

@@ -20,6 +20,7 @@
   height: 100vh;
   margin: 0 auto;
 }
+
 .app {
   display: flex;
   flex-direction: column;
@@ -27,6 +28,7 @@
   align-items: flex-end;
   justify-content: center;
 }
+
 .todo-list {
   height: 700px;
   width: 550px;

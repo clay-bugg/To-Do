@@ -1,75 +1,6 @@
 <template>
-  <div class="task-list container">
-    <transition-group
-      v-if="selectedListType === 'tasks'"
-      tag="ul"
-      name="fade"
-      class="item-list"
-    >
-      <li v-for="task in activeTasks" 
-        :key="task.id"
-        class="list-item-box container"
-      >
-        <div class="list-item">
-          <input
-            type="checkbox"
-            :class="['checkbox', { checked: task.completed }]"
-            @change="updateTask(task.id, { completed: !task.completed })"
-            />
-          
-          <input
-            v-if="editingId === task.id"
-            v-model="editedName"
-            @keyup.enter="submitEdit(task)"
-            @blur="submitEdit(task)"
-            class="task-edit-input"
-          />
-
-          <p v-if="task" @dblclick="startEditing(task)" class="task-name">
-            {{ task.name }}
-          </p>
-
-        </div>
-
-        <div class="list-item-buttons">
-
-          <button
-            class="list-item-button edit-button"
-            @click="editingId === task.id ? submitEdit(task) : startEditing(task)"
-            title="Edit"
-          >
-
-            <Icon
-              v-if="editingId === task.id"
-              name="ph:check-fat-fill"
-              class="button-icon"
-              id="tick-icon"
-            />
-
-            <Icon
-              v-else
-              name="clarity:edit-solid"
-              class="button-icon"
-              id="edit-icon"
-            />
-
-          </button>
-
-          <button
-            class="list-item-button delete-button"
-            @click="deleteTask(task.id)"
-            id="bin-icon"
-            title="Delete"
-          >
-          
-            <Icon name="mdi:bin" class="button-icon" />
-
-          </button>
-        </div>
-      </li>
-    </transition-group>
-
-    <transition-group
+    <div class="completed-list">
+      <transition-group
       tag="ul"
       v-if="selectedListType === 'completed'"
       name="fade"
@@ -77,7 +8,7 @@
     >
       <li v-for="task in completedTasks" :key="task.id" class="list-item-box container">
         <div class="list-item completed-list-item">
-          <p>{{ task.name }}</p>
+          <p v-if="task">{{ task.name }}</p>
         </div>
         <div class="list-item-buttons">
           <button
@@ -100,15 +31,15 @@
       </li>
     </transition-group>
 
-  </div>
+    </div>
 </template>
 
 <script setup>
 //---Imports---//
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
 
 //---Stores---//
-const { activeTasks, selectedListType } = storeToRefs(useTaskStore())
+const { completedTasks, selectedListType } = storeToRefs(useTaskStore())
 const { updateTask, deleteTask } = useTaskStore()
 
 //---Variables---//
@@ -127,7 +58,8 @@ function cancelEditing() {
   editingId.value = null
   editedName.value = task.name
 }
-//---Submit Task---//
+
+//---Submit Edit---//
 function submitEdit(task) {
   const trimmed = editedName.value.trim()
   if (trimmed && trimmed !== task.name) {
@@ -135,10 +67,11 @@ function submitEdit(task) {
   }
   cancelEditing()
 }
+
 </script>
 
 <style lang="scss" scoped>
-
+    
 /*---Task List---*/
 .task-list {
   width: 100%;
@@ -280,5 +213,6 @@ function submitEdit(task) {
   align-items: center;
   height: 100%;
   cursor: text;
+  
 }
 </style>
