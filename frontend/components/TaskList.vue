@@ -163,6 +163,8 @@ function submitEdit(task) {
   width: 100%;
   height: 50px;
   padding: 0 15px;
+  box-shadow: inset 0 -3px 2px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(0, 0, 0, 0.2);
 }
 
 .list-item {
@@ -170,7 +172,7 @@ function submitEdit(task) {
   align-items: center;
   gap: 16px;
   width: fit-content;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .completed-list-item {
@@ -208,7 +210,7 @@ function submitEdit(task) {
 .list-item-buttons {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   width: fit-content;
   height: 100%;
 }
@@ -224,20 +226,21 @@ function submitEdit(task) {
   justify-content: center;
   height: 28px;
   width: 28px;
+  padding: 4px;
 
   &:hover {
     transform: scale(1.1);
   }
 }
 
-.edit-button {
-  height: 26px;
-  width: 26px;
+.delete-button {
+  padding: 2px;
 }
 
 .button-icon {
   height: 100%;
   width: 100%;
+  color: #2a2a2a;
 }
 
 #undo-icon {
@@ -246,7 +249,7 @@ function submitEdit(task) {
 
 /*---Animations---*/
 .fade-leave-active {
-  transition: all 1s ease-in;
+  transition: all 0.2s ease-in;
 }
 
 .fade-leave-to {
