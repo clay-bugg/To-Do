@@ -1,42 +1,46 @@
 <template>
   <div class="login">
+    <div class="login-box">
+      <Button
+        v-for="b in props.buttons"
+        :key="b"
+        :label="String(b)"
+        @click="handleUserDetails(String(b))"
+      />
+    </div>
 
-  <div class="login-box">
-    <Button v-for="b in props.buttons" :key="b" :label="String(b)" @click="handleUserDetails(String(b))" />
-  </div>
+    <!--Login Box-->
+    <div class="login-panel container" :class="{ active: loginBox === true }">
+      <h5>Login</h5>
+      <button class="close-form-button" @click="closeForm('login')">
+        <Icon name="mdi:close-box" class="close-form-button-icon" />
+      </button>
 
-  <!--Login Box-->
-  <div class="login-panel container" :class="{ 'active': loginBox === true }">
-    <h5>Login</h5>
-    <button class="close-form-button" @click="closeForm('login')">
-      <Icon name="mdi:close-box" class="close-form-button-icon" />
-    </button>
+      <form @submit.prevent="handleLogin">
+        <input v-model="username" placeholder="Username" />
+        <input v-model="password" placeholder="Password" type="password" />
+        <button type="submit" id="login-submit">Login</button>
+      </form>
 
-    <form @submit.prevent="handleLogin">
-      <input v-model="username" placeholder="Username" />
-      <input v-model="password" placeholder="Password" type="password" />
-      <button type="submit" id="login-submit">Login</button>
-    </form>
+      <div v-if="error" style="color: red">{{ error }}</div>
+    </div>
 
-    <div v-if="error" style="color: red">{{ error }}</div>
-  </div>
+    <!--Signup Box-->
+    <div class="login-panel container" :class="{ active: signupBox === true }">
+      <h5>Sign Up</h5>
+      <button class="close-form-button" @click="closeForm('signup')">
+        <Icon name="mdi:close-box" class="close-form-button-icon" />
+      </button>
 
-  <!--Signup Box-->
-  <div class="login-panel container" :class="{ 'active': signupBox === true }">
-    <h5>Sign Up</h5>
-    <button class="close-form-button" @click="closeForm('signup')">
-      <Icon name="mdi:close-box" class="close-form-button-icon" />
-    </button>
+      <form @submit.prevent="handleSignup">
+        <input v-model="newUsername" placeholder="Username" />
+        <input v-model="newPassword" placeholder="Password" type="password" />
+        <button type="submit" id="signup-submit">Sign Up</button>
+      </form>
 
-    <form @submit.prevent="handleSignup">
-      <input v-model="newUsername" placeholder="Username" />
-      <input v-model="newPassword" placeholder="Password" type="password" />
-      <button type="submit" id="signup-submit">Sign Up</button>
-    </form>
-
-    <div v-if="signupError" style="color: red">{{ signupError }}</div>
-    <div v-if="signupSuccess" style="color: green">{{ signupSuccess }}</div>
-  </div>
+      <div v-if="signupError" style="color: red">{{ signupError }}</div>
+      <div v-if="signupSuccess" style="color: green">{{ signupSuccess }}</div>
+    </div>
   </div>
 </template>
 
@@ -44,7 +48,7 @@
 //---Props---//
 const props = defineProps({
   buttons: Array,
-})
+});
 
 //---Login State---//
 const username = ref("");
@@ -62,7 +66,7 @@ const loginBox = ref(false);
 const signupBox = ref(false);
 
 function handleUserDetails(button) {
-  button = button.toLowerCase().replace(/\s+/g, '');
+  button = button.toLowerCase().replace(/\s+/g, "");
   if (button === "login") {
     loginBox.value = true;
     signupBox.value = false;
@@ -90,7 +94,10 @@ async function handleLogin() {
   const res = await fetch("http://localhost:3001/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: username.value, password: password.value }),
+    body: JSON.stringify({
+      username: username.value,
+      password: password.value,
+    }),
   });
   const data = await res.json();
   if (data.token) {
@@ -107,7 +114,10 @@ async function handleSignup() {
   const res = await fetch("http://localhost:3001/api/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: newUsername.value, password: newPassword.value }),
+    body: JSON.stringify({
+      username: newUsername.value,
+      password: newPassword.value,
+    }),
   });
   const data = await res.json();
   if (data.success) {
