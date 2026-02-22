@@ -1,18 +1,19 @@
+@use "variables" as *;
 @import url("https://fonts.googleapis.com/css?family=Inter:100,200,300,400,500,600,700,800,900&display=swap");
 
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f0f0f0;
-  --text-primary: #333333;
-  --text-secondary: #949494;
+  --bg-primary: #{$white};
+  --bg-secondary: #{$off-white};
+  --text-primary: #{$text-dark};
+  --text-secondary: #{$text-light};
   --border-color: rgba(0, 0, 0, 0.2);
-  --shadow-color: rgba(0, 0, 0, 0.15);
+  --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode {
   --bg-primary: #1e1e1e;
   --bg-secondary: #2a2a2a;
-  --text-primary: #f5f5f5;
+  --text-primary: #{$light-grey};
   --text-secondary: #a0a0a0;
   --border-color: rgba(255, 255, 255, 0.15);
   --shadow-color: rgba(0, 0, 0, 0.5);
@@ -33,7 +34,7 @@ html {
 body {
   font-family: "Inter", sans-serif;
   color: var(--text-primary);
-  background-color: #f0f0f0;
+  background-color: $off-white;
   font-weight: 300;
 }
 
@@ -66,7 +67,7 @@ input {
 
 .container {
   width: 100%;
-  background-color: #ffffff;
-  border-radius: 5px;
+  background-color: $white;
+  border-radius: $radius-sm;
   box-shadow: var(--shadow-color);
 }

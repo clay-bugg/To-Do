@@ -15,7 +15,6 @@
 const { fetchTasks } = useTaskStore();
 const user = useSupabaseUser();
 
-// Fetch tasks whenever the logged-in user changes (login, logout, page load)
 watch(
   user,
   (u) => {
@@ -25,7 +24,9 @@ watch(
 );
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use "@/assets/css/variables" as *;
+
 .page {
   width: 100vw;
   min-height: 100vh;
@@ -37,7 +38,8 @@ watch(
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #ffffff;
+  width: 100%;
+  background-color: $white;
 }
 
 .todo-list {
@@ -47,12 +49,12 @@ watch(
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  border-radius: 15px;
+  border-radius: $radius-lg;
   padding: 35px;
-  background-color: #f0f0f0;
+  background-color: $off-white;
   margin: 0 auto;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 -3px 2px rgba(0, 0, 0, 0.3);
+  border: $border-std;
+  box-shadow: $shadow-inset;
   margin-bottom: 20px;
 }
 </style>

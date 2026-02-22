@@ -2,7 +2,7 @@ import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
   modules: ["@nuxt/icon", "@pinia/nuxt", "@nuxtjs/supabase"],
-  css: ["@/assets/css/main.css"],
+  css: ["@/assets/css/main.scss"],
   devtools: {
     enabled: true,
     timeline: {

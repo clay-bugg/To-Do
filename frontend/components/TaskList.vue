@@ -127,18 +127,16 @@ function submitEdit(task) {
 </script>
 
 <style lang="scss" scoped>
-/*---Task List---*/
-.task-list-container {
-  background-color: #ffffff;
-}
+@use "@/assets/css/variables" as *;
 
+/*---Task List---*/
 .task-list {
   width: 100%;
   height: 100%;
   padding: 25px;
-  background-color: #ffffff;
-  box-shadow: inset 0 -3px 2px rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  background-color: $white;
+  box-shadow: $shadow-inset;
+  border: $border-std;
 }
 
 .item-list {
@@ -150,8 +148,7 @@ function submitEdit(task) {
   width: 100%;
   height: 100%;
   list-style: none;
-  border-radius: 10px;
-  border: 2px s;
+  border-radius: $radius-md;
 }
 
 /*---List Item---*/
@@ -163,8 +160,8 @@ function submitEdit(task) {
   width: 100%;
   height: 50px;
   padding: 0 15px;
-  box-shadow: inset 0 -3px 2px rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(0, 0, 0, 0.2);
+  box-shadow: $shadow-inset;
+  border: $border-std;
 }
 
 .list-item {
@@ -188,8 +185,8 @@ function submitEdit(task) {
   -webkit-appearance: none;
   height: 100%;
   padding: 0 5px;
-  border: 0.5px solid black;
-  border-radius: 5px;
+  border: $border-thin;
+  border-radius: $radius-sm;
   font-weight: 300;
   font-size: 20px;
 }
@@ -199,11 +196,10 @@ function submitEdit(task) {
   width: 18px;
   height: 18px;
   cursor: pointer;
-}
 
-.checkbox:checked {
-  accent-color: var(--maingrey);
-  pointer-events: none;
+  &:checked {
+    pointer-events: none;
+  }
 }
 
 /*---List Buttons---*/
@@ -240,7 +236,7 @@ function submitEdit(task) {
 .button-icon {
   height: 100%;
   width: 100%;
-  color: #2a2a2a;
+  color: $text-dark;
 }
 
 #undo-icon {

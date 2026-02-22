@@ -31,7 +31,9 @@ onMounted(() => window.addEventListener("keydown", enterPressed));
 onUnmounted(() => window.removeEventListener("keydown", enterPressed));
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use "@/assets/css/variables" as *;
+
 .new-task {
   display: flex;
   align-items: center;
@@ -51,21 +53,21 @@ onUnmounted(() => window.removeEventListener("keydown", enterPressed));
   font-size: 0.8rem;
   font-family: inherit;
   padding: 0 10px;
-  box-shadow: inset 0 -3px 2px rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(0, 0, 0, 0.2);
-}
+  box-shadow: $shadow-inset;
+  border: $border-std;
 
-.new-task-input:focus {
-  outline: none;
-}
+  &:focus {
+    outline: none;
+  }
 
-.new-task-input:focus::placeholder {
-  color: white;
-}
+  &:focus::placeholder {
+    color: $white;
+  }
 
-.new-task-input::placeholder {
-  color: var(--placeholdergrey);
-  font-weight: 150;
+  &::placeholder {
+    color: $text-light;
+    font-weight: 150;
+  }
 }
 
 .new-task-button {
@@ -80,15 +82,15 @@ onUnmounted(() => window.removeEventListener("keydown", enterPressed));
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 50px;
+  border-radius: $radius-pill;
   overflow: hidden;
   position: absolute;
   right: 5px;
   top: 4px;
-}
 
-.new-task-button:hover {
-  transform: scale(1.05);
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 
 #add-icon {

@@ -9,7 +9,7 @@
         placeholder="Password"
         required
       />
-      <p v-if="error">{{ error }}</p>
+      <p v-if="error" class="error-msg">{{ error }}</p>
       <button type="submit" class="login-button">
         {{ isRegistering ? "Register" : "Login" }}
       </button>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-definePageMeta({ middleware: "guest" }); // redirect if already logged in
+definePageMeta({ middleware: "guest" });
 
 const supabase = useSupabaseClient();
 const email = ref("");
@@ -56,6 +56,8 @@ async function handleSubmit() {
 </script>
 
 <style scoped lang="scss">
+@use "@/assets/css/variables" as *;
+
 .login {
   display: flex;
   flex-direction: column;
@@ -63,20 +65,25 @@ async function handleSubmit() {
   justify-content: center;
   width: fit-content;
   padding: 2em;
-  border-radius: 10px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 -3px 2px rgba(0, 0, 0, 0.3);
+  border-radius: $radius-md;
+  border: $border-std;
+  box-shadow: $shadow-inset;
 
   h2 {
     margin-bottom: 1em;
   }
 
+  .error-msg {
+    color: red;
+    font-size: 0.7rem;
+  }
+
   input {
     padding: 0.5em;
     margin: 0.5em;
-    border-radius: 5px;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 -3px 2px rgba(0, 0, 0, 0.3);
+    border-radius: $radius-sm;
+    border: $border-std;
+    box-shadow: $shadow-inset;
     font-size: 0.8rem;
     width: 100%;
   }
@@ -84,29 +91,29 @@ async function handleSubmit() {
   .login-button {
     padding: 0.5em;
     margin: 0.5em;
-    border-radius: 5px;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 -3px 2px rgba(0, 0, 0, 0.3);
+    border-radius: $radius-sm;
+    border: $border-std;
+    box-shadow: $shadow-inset;
     font-size: 0.8rem;
     width: 100%;
-    background-color: #597bcb;
-    color: #ffffff;
+    background-color: $accent;
+    color: $white;
     transition: all 0.1s ease;
+
     &:hover {
-      background-color: #4d699e;
+      background-color: $accent-dark;
     }
     &:active {
-      background-color: #597bcb;
+      background-color: $accent;
     }
   }
+
   .need-account {
     font-size: 0.7rem;
     cursor: pointer;
-    color: #597bcb;
+    color: $accent;
     background: none;
     border: none;
-    padding: none;
-    margin: none;
     box-shadow: none;
     font-weight: 400;
     transition: font-weight 0.1s ease;

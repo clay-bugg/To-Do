@@ -22,38 +22,40 @@ const { selectedListType } = storeToRefs(useTaskStore());
 </script>
 
 <style scoped lang="scss">
+@use "@/assets/css/variables" as *;
+
 .menu-buttons {
   display: flex;
   align-items: center;
   width: 100%;
-  border-radius: 10px;
+  border-radius: $radius-md;
   padding: 5px;
   gap: 10px;
 
   button {
     flex: 1;
     height: 34px;
-    background-color: #ffffff;
+    background-color: $white;
     border: none;
     border-radius: 7px;
     font-size: 0.75rem;
     font-family: inherit;
     font-weight: 400;
-    color: #555;
+    color: $text-mid;
     cursor: pointer;
-    box-shadow: inset 0 -3px 2px rgba(0, 0, 0, 0.3);
+    box-shadow: $shadow-inset;
     transition:
       background-color 0.15s ease,
       font-weight 0.1s ease;
 
     &.active {
       font-weight: 600;
-      color: #222;
-      box-shadow: inset 0 -4px 2px rgba(0, 0, 0, 0.2);
+      color: $text-dark;
+      box-shadow: $shadow-inset-light;
     }
 
     &:hover:not(.active) {
-      box-shadow: inset 0 -4px 2px rgba(0, 0, 0, 0.2);
+      box-shadow: $shadow-inset-light;
     }
   }
 }
