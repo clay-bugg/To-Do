@@ -1,4 +1,7 @@
+packages:
+  - frontend
+
 onlyBuiltDependencies:
-  - '@parcel/watcher'
+  - "@parcel/watcher"
   - esbuild
   - sqlite3

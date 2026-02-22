@@ -9,7 +9,7 @@
   <div class="login-panel container" :class="{ 'active': loginBox === true }">
     <h5>Login</h5>
     <button class="close-form-button" @click="closeForm('login')">
-      <Icon name="mdi:close-box" class="close-forK)m-button-icon" />
+      <Icon name="mdi:close-box" class="close-form-button-icon" />
     </button>
 
     <form @submit.prevent="handleLogin">
@@ -36,15 +36,11 @@
 
     <div v-if="signupError" style="color: red">{{ signupError }}</div>
     <div v-if="signupSuccess" style="color: green">{{ signupSuccess }}</div>
-    
   </div>
   </div>
 </template>
 
 <script setup>
-//---Imports---//
-import { ref } from "vue";
-
 //---Props---//
 const props = defineProps({
   buttons: Array,
@@ -61,15 +57,40 @@ const newPassword = ref("");
 const signupError = ref("");
 const signupSuccess = ref("");
 
+//---Login/Signup UI---//
+const loginBox = ref(false);
+const signupBox = ref(false);
+
+function handleUserDetails(button) {
+  button = button.toLowerCase().replace(/\s+/g, '');
+  if (button === "login") {
+    loginBox.value = true;
+    signupBox.value = false;
+  } else if (button === "signup") {
+    signupBox.value = true;
+    loginBox.value = false;
+    signupError.value = "";
+    signupSuccess.value = "";
+  }
+}
+
+function closeForm(button) {
+  if (button === "login") {
+    loginBox.value = false;
+    error.value = "";
+  } else if (button === "signup") {
+    signupBox.value = false;
+    signupError.value = "";
+    signupSuccess.value = "";
+  }
+}
+
 //---Login Handler---//
 async function handleLogin() {
   const res = await fetch("http://localhost:3001/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      username: username.value,
-      password: password.value,
-    }),
+    body: JSON.stringify({ username: username.value, password: password.value }),
   });
   const data = await res.json();
   if (data.token) {
@@ -86,10 +107,7 @@ async function handleSignup() {
   const res = await fetch("http://localhost:3001/api/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      username: newUsername.value,
-      password: newPassword.value,
-    }),
+    body: JSON.stringify({ username: newUsername.value, password: newPassword.value }),
   });
   const data = await res.json();
   if (data.success) {
@@ -102,34 +120,6 @@ async function handleSignup() {
     signupError.value = data.error || "Signup failed";
   }
 }
-
-//---Login/Signup UI---//
-const loginBox = ref(false);
-const signupBox = ref(false);
-function handleUserDetails(button) {
-  button = button.toLowerCase().replace(/\s+/g, '');
-  if (button === "login") {
-    loginBox.value = true;
-    signupBox.value = false;
-  }
-  else if (button === "signup") {
-    signupBox.value = true;
-    loginBox.value = false;
-    signupError.value = "";
-    signupSuccess.value = "";
-  }
-}
-//---Close Form---//
-function closeForm(button) {
-  if (button === "login") {
-    loginBox.value = false;
-    error.value = "";
-  } else if (button === "signup") {
-    signupBox.value = false;
-    signupError.value = "";
-    signupSuccess.value = "";
-  }
-}
 </script>
 
 <style scoped lang="scss">
@@ -139,20 +129,6 @@ function closeForm(button) {
   gap: 10px;
   width: fit-content;
   z-index: 1;
-}
-
-.login-button {
-  background-color: black;
-}
-
-#login:hover {
-  background-color: var(--logingreen);
-  color: var(--offwhite);
-}
-
-#sign-up:hover {
-  background-color: var(--signupblue);
-  color: var(--offwhite);
 }
 
 .login-panel {
@@ -234,10 +210,5 @@ function closeForm(button) {
     border-color: var(--maingrey);
     color: var(--maingrey);
   }
-}
-
-#signup-submit:hover {
-  background-color: var(--signupblue);
-  border-color: var(--signupblue);
 }
 </style>
