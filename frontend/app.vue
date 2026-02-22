@@ -11,6 +11,20 @@
   </div>
 </template>
 
+<script setup>
+const { fetchTasks } = useTaskStore();
+const user = useSupabaseUser();
+
+// Fetch tasks whenever the logged-in user changes (login, logout, page load)
+watch(
+  user,
+  (u) => {
+    if (u) fetchTasks();
+  },
+  { immediate: true },
+);
+</script>
+
 <style scoped>
 .page {
   width: 100vw;
