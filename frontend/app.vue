@@ -12,6 +12,7 @@
 </template>
 
 <script setup>
+
 </script>
 
 <style scoped>
@@ -24,8 +25,7 @@
 .app {
   display: flex;
   flex-direction: column;
-  gap: 50px;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
 }
 
@@ -38,7 +38,7 @@
   gap: 16px;
   border-radius: 15px;
   padding: 35px;
-  background-color: var(--offwhite);
+  background-color: #ffffff;
   margin: 0 auto;
 }
 </style>

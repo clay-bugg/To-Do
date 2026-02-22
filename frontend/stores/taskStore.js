@@ -11,6 +11,7 @@ export const useTaskStore = defineStore('task', () => {
   const activeTasks = computed(() => tasks.value.filter(t => !t.completed))
   const completedTasks = computed(() => tasks.value.filter(t => t.completed))
   const tasks = ref([])
+  const isDarkMode = ref(false)
 
 //---Add Task---//
   function addTask(taskName) {
@@ -41,5 +42,6 @@ return {
     deleteTask,
     activeTasks,
     completedTasks,
+    isDarkMode
   }
 })

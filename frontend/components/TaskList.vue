@@ -6,7 +6,8 @@
       name="fade"
       class="item-list"
     >
-      <li v-for="task in activeTasks" 
+      <li
+        v-for="task in activeTasks"
         :key="task.id"
         class="list-item-box container"
       >
@@ -15,8 +16,8 @@
             type="checkbox"
             :class="['checkbox', { checked: task.completed }]"
             @change="updateTask(task.id, { completed: !task.completed })"
-            />
-          
+          />
+
           <input
             v-if="editingId === task.id"
             v-model="editedName"
@@ -25,20 +26,19 @@
             class="task-edit-input"
           />
 
-          <p v-if="task" @dblclick="startEditing(task)" class="task-name">
+          <p v-else @dblclick="startEditing(task)" class="task-name">
             {{ task.name }}
           </p>
-
         </div>
 
         <div class="list-item-buttons">
-
           <button
             class="list-item-button edit-button"
-            @click="editingId === task.id ? submitEdit(task) : startEditing(task)"
+            @click="
+              editingId === task.id ? submitEdit(task) : startEditing(task)
+            "
             title="Edit"
           >
-
             <Icon
               v-if="editingId === task.id"
               name="ph:check-fat-fill"
@@ -52,7 +52,6 @@
               class="button-icon"
               id="edit-icon"
             />
-
           </button>
 
           <button
@@ -61,9 +60,7 @@
             id="bin-icon"
             title="Delete"
           >
-          
             <Icon name="mdi:bin" class="button-icon" />
-
           </button>
         </div>
       </li>
@@ -75,7 +72,11 @@
       name="fade"
       class="item-list"
     >
-      <li v-for="task in completedTasks" :key="task.id" class="list-item-box container">
+      <li
+        v-for="task in completedTasks"
+        :key="task.id"
+        class="list-item-box container"
+      >
         <div class="list-item completed-list-item">
           <p>{{ task.name }}</p>
         </div>
@@ -99,46 +100,46 @@
         </div>
       </li>
     </transition-group>
-
   </div>
 </template>
 
 <script setup>
 //---Imports---//
-import { nanoid } from 'nanoid'
+import { nanoid } from "nanoid";
+import ToggleSwitch from "./ToggleSwitch.vue";
 
 //---Stores---//
-const { activeTasks, selectedListType } = storeToRefs(useTaskStore())
-const { updateTask, deleteTask } = useTaskStore()
+const { activeTasks, selectedListType } = storeToRefs(useTaskStore());
+const { updateTask, deleteTask } = useTaskStore();
 
 //---Variables---//
-const editingId = ref(null)
-const editedName = ref("")
-const id = nanoid()
+const editingId = ref(null);
+const editedName = ref("");
+const isDarkMode = ref(false);
+const id = nanoid();
 
 //---Functions---//
 function startEditing(task) {
-  editingId.value = task.id
-  editedName.value = task.name
+  editingId.value = task.id;
+  editedName.value = task.name;
 }
 
 //---Cancel Editing---//
 function cancelEditing() {
-  editingId.value = null
-  editedName.value = task.name
+  editingId.value = null;
+  editedName.value = task.name;
 }
 //---Submit Task---//
 function submitEdit(task) {
-  const trimmed = editedName.value.trim()
+  const trimmed = editedName.value.trim();
   if (trimmed && trimmed !== task.name) {
-    updateTask(task.id, { name: trimmed })
+    updateTask(task.id, { name: trimmed });
   }
-  cancelEditing()
+  cancelEditing();
 }
 </script>
 
 <style lang="scss" scoped>
-
 /*---Task List---*/
 .task-list {
   width: 100%;
