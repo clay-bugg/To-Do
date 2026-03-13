@@ -13,7 +13,7 @@
 
 <script setup>
 const { addTask } = useTaskStore();
-const { selectedListType } = storeToRefs(useTaskStore());
+const { selectedListType, activeTasks } = storeToRefs(useTaskStore());
 
 const newTaskName = ref("");
 

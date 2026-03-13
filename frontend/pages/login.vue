@@ -35,8 +35,9 @@ const isRegistering = ref(false);
 
 async function handleSubmit() {
   error.value = "";
+  console.log("[login] Attempting auth | isRegistering:", isRegistering.value, "| email:", email.value);
 
-  const { error: authError } = isRegistering.value
+  const { data: authData, error: authError } = isRegistering.value
     ? await supabase.auth.signUp({
         email: email.value,
         password: password.value,
@@ -46,12 +47,15 @@ async function handleSubmit() {
         password: password.value,
       });
 
+  console.log("[login] Auth response | data:", authData, "| error:", authError);
+
   if (authError) {
     error.value = authError.message;
     return;
   }
 
-  await navigateTo("/");
+  console.log("[login] Success — navigating to /");
+  await navigateTo("/", { external: true });
 }
 </script>
 

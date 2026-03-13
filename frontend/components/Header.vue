@@ -1,20 +1,24 @@
 <template>
   <header class="container">
-    <button @click="handleLogout" class="logout-button">Logout</button>
+    <p v-if="user">Logged in as {{ user.email }}</p>
+    <button @click="handleLogout" class="logout-button">
+      Logout
+    </button>
   </header>
 </template>
 
 <script setup>
-const { logout } = useUserStore();
+const supabase = useSupabaseClient()
+const user = useSupabaseUser()
 
 async function handleLogout() {
-  await logout();
-  await navigateTo("/login");
+  await supabase.auth.signOut()
+  await navigateTo('/login', { external: true })
 }
 </script>
 
 <style scoped lang="scss">
-@use "@/assets/css/variables" as *;
+@use '@/assets/css/variables' as *;
 
 header {
   width: 100%;
@@ -22,8 +26,14 @@ header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  gap: 2em;
   padding: 0 60px;
   z-index: 1;
+
+  p {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
 }
 
 .logout-button {
