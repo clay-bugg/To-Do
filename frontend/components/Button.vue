@@ -1,5 +1,6 @@
 <template>
-  <button> {{ label }}
+  <button>
+    {{ label }}
     <div class="arrow-wrapper">
       <div class="arrow"></div>
     </div>
@@ -8,22 +9,24 @@
 
 <script setup>
 const props = defineProps({
-  label: String,
+  label: String
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use '@/assets/css/variables' as *;
+
 button {
   --arrow-width: 10px;
   --arrow-stroke: 2px;
   box-sizing: border-box;
   border: 0;
   border-radius: 20px;
-  color: var(--offwhite);
+  color: $offwhite;
   padding: 1em 1.8em;
-  background: var(--maingrey);
+  background: $maingrey;
   display: flex;
-  transition: 0.2s background;
+  transition: all all $transition-mid;
   align-items: center;
   gap: 0.6em;
   font-weight: 700;
@@ -37,23 +40,23 @@ button .arrow-wrapper {
 
 button .arrow {
   margin-top: 1px;
-  width: var(--arrow-width);
-  background: var(--maingrey);
-  height: var(--arrow-stroke);
+  width: $arrow-width;
+  background: $maingrey;
+  height: $arrow-stroke;
   position: relative;
-  transition: 0.2s;
+  transition: all $transition-mid;
 }
 
 button .arrow::before {
-  content: "";
+  content: '';
   box-sizing: border-box;
   position: absolute;
-  border: solid var(--offwhite);
-  border-width: 0 var(--arrow-stroke) var(--arrow-stroke) 0;
+  border: solid $offwhite;
+  border-width: 0 $arrow-stroke $arrow-stroke 0;
   display: inline-block;
   top: -3px;
   right: 3px;
-  transition: 0.2s;
+  transition: all $transition-mid;
   padding: 3px;
   transform: rotate(-45deg);
 }
@@ -63,7 +66,7 @@ button:hover {
 }
 
 button:hover .arrow {
-  background: var(--offwhite);
+  background: $offwhite;
 }
 
 button:hover .arrow:before {

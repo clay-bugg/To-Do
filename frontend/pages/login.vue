@@ -102,7 +102,7 @@ async function handleSubmit() {
     width: 100%;
     background-color: $accent;
     color: $white;
-    transition: all 0.1s ease;
+    transition: all var(--transition-fast);
 
     &:hover {
       background-color: $accent-dark;
@@ -120,7 +120,7 @@ async function handleSubmit() {
     border: none;
     box-shadow: none;
     font-weight: 400;
-    transition: font-weight 0.1s ease;
+    transition: font-weight var(--transition-fast);
     margin-top: 1em;
 
     &:hover {

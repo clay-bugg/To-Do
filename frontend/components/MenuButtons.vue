@@ -18,11 +18,11 @@
 </template>
 
 <script setup>
-const { selectedListType } = storeToRefs(useTaskStore());
+const { selectedListType } = storeToRefs(useTaskStore())
 </script>
 
 <style scoped lang="scss">
-@use "@/assets/css/variables" as *;
+@use '@/assets/css/variables' as *;
 
 .menu-buttons {
   display: flex;
@@ -36,7 +36,7 @@ const { selectedListType } = storeToRefs(useTaskStore());
     flex: 1;
     height: 34px;
     background-color: $white;
-    border: none;
+    border: $border-std;
     border-radius: 7px;
     font-size: 0.75rem;
     font-family: inherit;
@@ -52,6 +52,7 @@ const { selectedListType } = storeToRefs(useTaskStore());
       font-weight: 600;
       color: $text-dark;
       box-shadow: $shadow-inset-light;
+      border: $border-dark;
     }
 
     &:hover:not(.active) {

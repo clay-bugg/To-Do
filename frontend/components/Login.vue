@@ -10,7 +10,10 @@
     </div>
 
     <!--Login Box-->
-    <div class="login-panel container" :class="{ active: loginBox === true }">
+    <div
+      class="login-panel container"
+      :class="{ active: loginBox === true }"
+    >
       <h5>Login</h5>
       <button class="close-form-button" @click="closeForm('login')">
         <Icon name="mdi:close-box" class="close-form-button-icon" />
@@ -18,7 +21,11 @@
 
       <form @submit.prevent="handleLogin">
         <input v-model="username" placeholder="Username" />
-        <input v-model="password" placeholder="Password" type="password" />
+        <input
+          v-model="password"
+          placeholder="Password"
+          type="password"
+        />
         <button type="submit" id="login-submit">Login</button>
       </form>
 
@@ -26,7 +33,10 @@
     </div>
 
     <!--Signup Box-->
-    <div class="login-panel container" :class="{ active: signupBox === true }">
+    <div
+      class="login-panel container"
+      :class="{ active: signupBox === true }"
+    >
       <h5>Sign Up</h5>
       <button class="close-form-button" @click="closeForm('signup')">
         <Icon name="mdi:close-box" class="close-form-button-icon" />
@@ -34,12 +44,20 @@
 
       <form @submit.prevent="handleSignup">
         <input v-model="newUsername" placeholder="Username" />
-        <input v-model="newPassword" placeholder="Password" type="password" />
+        <input
+          v-model="newPassword"
+          placeholder="Password"
+          type="password"
+        />
         <button type="submit" id="signup-submit">Sign Up</button>
       </form>
 
-      <div v-if="signupError" style="color: red">{{ signupError }}</div>
-      <div v-if="signupSuccess" style="color: green">{{ signupSuccess }}</div>
+      <div v-if="signupError" style="color: red">
+        {{ signupError }}
+      </div>
+      <div v-if="signupSuccess" style="color: green">
+        {{ signupSuccess }}
+      </div>
     </div>
   </div>
 </template>
@@ -47,87 +65,87 @@
 <script setup>
 //---Props---//
 const props = defineProps({
-  buttons: Array,
-});
+  buttons: Array
+})
 
 //---Login State---//
-const username = ref("");
-const password = ref("");
-const error = ref("");
+const username = ref('')
+const password = ref('')
+const error = ref('')
 
 //---Signup State---//
-const newUsername = ref("");
-const newPassword = ref("");
-const signupError = ref("");
-const signupSuccess = ref("");
+const newUsername = ref('')
+const newPassword = ref('')
+const signupError = ref('')
+const signupSuccess = ref('')
 
 //---Login/Signup UI---//
-const loginBox = ref(false);
-const signupBox = ref(false);
+const loginBox = ref(false)
+const signupBox = ref(false)
 
 function handleUserDetails(button) {
-  button = button.toLowerCase().replace(/\s+/g, "");
-  if (button === "login") {
-    loginBox.value = true;
-    signupBox.value = false;
-  } else if (button === "signup") {
-    signupBox.value = true;
-    loginBox.value = false;
-    signupError.value = "";
-    signupSuccess.value = "";
+  button = button.toLowerCase().replace(/\s+/g, '')
+  if (button === 'login') {
+    loginBox.value = true
+    signupBox.value = false
+  } else if (button === 'signup') {
+    signupBox.value = true
+    loginBox.value = false
+    signupError.value = ''
+    signupSuccess.value = ''
   }
 }
 
 function closeForm(button) {
-  if (button === "login") {
-    loginBox.value = false;
-    error.value = "";
-  } else if (button === "signup") {
-    signupBox.value = false;
-    signupError.value = "";
-    signupSuccess.value = "";
+  if (button === 'login') {
+    loginBox.value = false
+    error.value = ''
+  } else if (button === 'signup') {
+    signupBox.value = false
+    signupError.value = ''
+    signupSuccess.value = ''
   }
 }
 
 //---Login Handler---//
 async function handleLogin() {
-  const res = await fetch("http://localhost:3001/api/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const res = await fetch('http://localhost:3001/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       username: username.value,
-      password: password.value,
-    }),
-  });
-  const data = await res.json();
+      password: password.value
+    })
+  })
+  const data = await res.json()
   if (data.token) {
-    localStorage.setItem("token", data.token);
+    localStorage.setItem('token', data.token)
   } else {
-    error.value = data.error || "Login failed";
+    error.value = data.error || 'Login failed'
   }
 }
 
 //---Signup Handler---//
 async function handleSignup() {
-  signupError.value = "";
-  signupSuccess.value = "";
-  const res = await fetch("http://localhost:3001/api/register", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  signupError.value = ''
+  signupSuccess.value = ''
+  const res = await fetch('http://localhost:3001/api/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       username: newUsername.value,
-      password: newPassword.value,
-    }),
-  });
-  const data = await res.json();
+      password: newPassword.value
+    })
+  })
+  const data = await res.json()
   if (data.success) {
-    signupSuccess.value = "Signup successful! You can now log in.";
+    signupSuccess.value = 'Signup successful! You can now log in.'
     setTimeout(() => {
-      signupSuccess.value = "";
-      handleUserDetails("login");
-    }, 1000);
+      signupSuccess.value = ''
+      handleUserDetails('login')
+    }, 1000)
   } else {
-    signupError.value = data.error || "Signup failed";
+    signupError.value = data.error || 'Signup failed'
   }
 }
 </script>
@@ -153,7 +171,7 @@ async function handleSignup() {
   flex-direction: column;
   gap: 15px;
   transform: translateY(-20%);
-  transition: all 0.2s ease-in;
+  transition: all var(--transition-mid);
   opacity: 0;
   z-index: 2;
   pointer-events: none;

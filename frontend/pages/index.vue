@@ -17,9 +17,10 @@ const user = useSupabaseUser();
 
 watch(
   user,
-  (u) => {
-    console.log("[index.vue] user watcher fired | u:", u);
-    if (u?.id || u?.sub) fetchTasks();
+  (u, prevU) => {
+    const hadUser = prevU?.id || prevU?.sub;
+    const hasUser = u?.id || u?.sub;
+    if (hasUser && !hadUser) fetchTasks();
   },
   { immediate: true },
 );

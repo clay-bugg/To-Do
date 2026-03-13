@@ -6,33 +6,33 @@
       placeholder="Add New Task"
     />
     <button class="new-task-button" @click="add()" title="Add">
-      <Icon name="iconoir:plus-square-solid" id="add-icon" />
+      <Icon name="bi:plus" id="add-icon" />
     </button>
   </div>
 </template>
 
 <script setup>
-const { addTask } = useTaskStore();
-const { selectedListType, activeTasks } = storeToRefs(useTaskStore());
+const { addTask } = useTaskStore()
+const { selectedListType, activeTasks } = storeToRefs(useTaskStore())
 
-const newTaskName = ref("");
+const newTaskName = ref('')
 
 function enterPressed(e) {
-  if (e.key === "Enter") add();
+  if (e.key === 'Enter') add()
 }
 
 function add() {
-  if (!newTaskName.value) return;
-  addTask(newTaskName.value.trim());
-  newTaskName.value = "";
+  if (!newTaskName.value) return
+  addTask(newTaskName.value.trim())
+  newTaskName.value = ''
 }
 
-onMounted(() => window.addEventListener("keydown", enterPressed));
-onUnmounted(() => window.removeEventListener("keydown", enterPressed));
+onMounted(() => window.addEventListener('keydown', enterPressed))
+onUnmounted(() => window.removeEventListener('keydown', enterPressed))
 </script>
 
 <style scoped lang="scss">
-@use "@/assets/css/variables" as *;
+@use '@/assets/css/variables' as *;
 
 .new-task {
   display: flex;
@@ -50,13 +50,17 @@ onUnmounted(() => window.removeEventListener("keydown", enterPressed));
   width: 100%;
   height: 100%;
   cursor: text;
+  border: $border-std;
   font-size: 0.8rem;
   font-family: inherit;
-  padding: 0 10px;
+  padding: 0 14px;
   box-shadow: $shadow-inset;
-  border: $border-std;
+  border &:focus {
+    outline: none;
+  }
 
   &:focus {
+    border: $border-dark;
     outline: none;
   }
 
@@ -74,19 +78,19 @@ onUnmounted(() => window.removeEventListener("keydown", enterPressed));
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
-  border: none;
+  border: $border-dark;
   background: none;
-  height: 35px;
-  width: 35px;
+  height: 26px;
+  width: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: $radius-pill;
+  border-radius: $radius-lg;
   overflow: hidden;
   position: absolute;
-  right: 5px;
-  top: 4px;
+  right: 12px;
+  top: 8px;
 
   &:hover {
     transform: scale(1.05);
@@ -94,7 +98,12 @@ onUnmounted(() => window.removeEventListener("keydown", enterPressed));
 }
 
 #add-icon {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
+  color: $text-mid;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 </style>

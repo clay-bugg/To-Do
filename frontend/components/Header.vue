@@ -48,7 +48,7 @@ header {
   cursor: pointer;
   box-shadow: $shadow-inset;
   transition:
-    background-color 0.15s ease,
-    font-weight 0.1s ease;
+    background-color var(--transition-fast),
+    font-weight var(--transition-mid);
 }
 </style>

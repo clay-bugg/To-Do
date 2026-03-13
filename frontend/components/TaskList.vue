@@ -1,133 +1,155 @@
 <template>
   <div class="task-list container">
-    <transition-group
-      v-if="selectedListType === 'tasks'"
-      tag="ul"
-      name="fade"
-      class="item-list"
-    >
-      <li
-        v-for="task in activeTasks"
-        :key="task.id"
-        class="list-item-box container"
-      >
-        <div class="list-item">
-          <input
-            type="checkbox"
-            :class="['checkbox', { checked: task.completed }]"
-            @change="updateTask(task.id, { completed: !task.completed })"
-          />
+    <div class="slide-viewport">
+      <Transition :name="slideDirection">
+        <div
+          v-if="selectedListType === 'tasks'"
+          key="tasks"
+          class="slide-panel"
+        >
+          <transition-group tag="ul" name="fade" class="item-list">
+            <li
+              v-for="task in activeTasks"
+              :key="task.id"
+              class="list-item-box container"
+            >
+              <div class="list-item">
+                <input
+                  type="checkbox"
+                  :class="['checkbox', { checked: task.completed }]"
+                  @change="
+                    updateTask(task.id, {
+                      completed: !task.completed
+                    })
+                  "
+                />
 
-          <input
-            v-if="editingId === task.id"
-            v-model="editedName"
-            @keyup.enter="submitEdit(task)"
-            @blur="submitEdit(task)"
-            class="task-edit-input"
-          />
+                <input
+                  v-if="editingId === task.id"
+                  v-model="editedName"
+                  @keyup.enter="submitEdit(task)"
+                  @blur="submitEdit(task)"
+                  class="task-edit-input"
+                />
 
-          <p v-else @dblclick="startEditing(task)" class="task-name">
-            {{ task.name }}
-          </p>
+                <p
+                  v-else
+                  @dblclick="startEditing(task)"
+                  class="task-name"
+                >
+                  {{ task.name }}
+                </p>
+              </div>
+
+              <div class="list-item-buttons">
+                <button
+                  class="list-item-button edit-button"
+                  @click="
+                    editingId === task.id
+                      ? submitEdit(task)
+                      : startEditing(task)
+                  "
+                  title="Edit"
+                >
+                  <Icon
+                    v-if="editingId === task.id"
+                    name="oi:check"
+                    class="button-icon"
+                    id="tick-icon"
+                  />
+                  <Icon
+                    v-else
+                    name="clarity:edit-solid"
+                    class="button-icon"
+                    id="edit-icon"
+                  />
+                </button>
+
+                <button
+                  class="list-item-button delete-button"
+                  @click="deleteTask(task.id)"
+                  title="Delete"
+                >
+                  <Icon name="mdi:bin" class="button-icon" />
+                </button>
+              </div>
+            </li>
+          </transition-group>
         </div>
 
-        <div class="list-item-buttons">
-          <button
-            class="list-item-button edit-button"
-            @click="
-              editingId === task.id ? submitEdit(task) : startEditing(task)
-            "
-            title="Edit"
-          >
-            <Icon
-              v-if="editingId === task.id"
-              name="ph:check-fat-fill"
-              class="button-icon"
-              id="tick-icon"
-            />
-            <Icon
-              v-else
-              name="clarity:edit-solid"
-              class="button-icon"
-              id="edit-icon"
-            />
-          </button>
-
-          <button
-            class="list-item-button delete-button"
-            @click="deleteTask(task.id)"
-            title="Delete"
-          >
-            <Icon name="mdi:bin" class="button-icon" />
-          </button>
+        <div v-else key="completed" class="slide-panel">
+          <transition-group tag="ul" name="fade" class="item-list">
+            <li
+              v-for="task in completedTasks"
+              :key="task.id"
+              class="list-item-box container"
+            >
+              <div class="list-item completed-list-item">
+                <p>{{ task.name }}</p>
+              </div>
+              <div class="list-item-buttons">
+                <button
+                  class="list-item-button undo-button"
+                  @click="updateTask(task.id, { completed: false })"
+                  title="Undo"
+                >
+                  <Icon name="fa:undo" class="button-icon" />
+                </button>
+                <button
+                  class="list-item-button delete-button"
+                  @click="deleteTask(task.id)"
+                  title="Delete"
+                >
+                  <Icon name="mdi:bin" class="button-icon" />
+                </button>
+              </div>
+            </li>
+          </transition-group>
         </div>
-      </li>
-    </transition-group>
-
-    <transition-group
-      v-if="selectedListType === 'completed'"
-      tag="ul"
-      name="fade"
-      class="item-list"
-    >
-      <li
-        v-for="task in completedTasks"
-        :key="task.id"
-        class="list-item-box container"
-      >
-        <div class="list-item completed-list-item">
-          <p>{{ task.name }}</p>
-        </div>
-        <div class="list-item-buttons">
-          <button
-            class="list-item-button undo-button"
-            @click="updateTask(task.id, { completed: false })"
-            title="Undo"
-          >
-            <Icon name="fa:undo" class="button-icon" />
-          </button>
-          <button
-            class="list-item-button delete-button"
-            @click="deleteTask(task.id)"
-            title="Delete"
-          >
-            <Icon name="mdi:bin" class="button-icon" />
-          </button>
-        </div>
-      </li>
-    </transition-group>
+      </Transition>
+    </div>
   </div>
 </template>
 
 <script setup>
 const { activeTasks, completedTasks, selectedListType } =
-  storeToRefs(useTaskStore());
-const { updateTask, deleteTask } = useTaskStore();
+  storeToRefs(useTaskStore())
+const { updateTask, deleteTask } = useTaskStore()
 
-const editingId = ref(null);
-const editedName = ref("");
+const editingId = ref(null)
+const editedName = ref('')
+const slideDirection = ref('slide-left')
+
+const TAB_ORDER = ['tasks', 'completed']
+
+watch(selectedListType, (newVal, oldVal) => {
+  slideDirection.value =
+    TAB_ORDER.indexOf(newVal) > TAB_ORDER.indexOf(oldVal)
+      ? 'slide-left'
+      : 'slide-right'
+})
 
 function startEditing(task) {
-  editingId.value = task.id;
-  editedName.value = task.name;
+  editingId.value = task.id
+  editedName.value = task.name
 }
 
 function cancelEditing() {
-  editingId.value = null;
-  editedName.value = "";
+  editingId.value = null
+  editedName.value = ''
 }
 
 function submitEdit(task) {
-  const trimmed = editedName.value.trim();
+  const trimmed = editedName.value.trim()
   if (trimmed && trimmed !== task.name) {
-    updateTask(task.id, { name: trimmed });
+    updateTask(task.id, { name: trimmed })
   }
-  cancelEditing();
+  cancelEditing()
 }
 </script>
 
 <style lang="scss" scoped>
-@use "@/assets/css/variables" as *;
+@use '@/assets/css/variables' as *;
 
 /*---Task List---*/
 .task-list {
@@ -137,8 +159,23 @@ function submitEdit(task) {
   background-color: $white;
   box-shadow: $shadow-inset;
   border: $border-std;
+  overflow: hidden;
 }
 
+/*---Slide Viewport (clips the sliding panels)---*/
+.slide-viewport {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.slide-panel {
+  width: 100%;
+  height: 100%;
+}
+
+/*---Item List---*/
 .item-list {
   display: flex;
   flex-direction: column;
@@ -184,11 +221,22 @@ function submitEdit(task) {
   -moz-appearance: none;
   -webkit-appearance: none;
   height: 100%;
-  padding: 0 5px;
-  border: $border-thin;
+  padding: 5.2px;
+  border: $border-light;
   border-radius: $radius-sm;
-  font-weight: 300;
-  font-size: 20px;
+  font-weight: 400;
+  font-size: 19px;
+  color: $text-mid;
+  letter-spacing: 0.1px;
+  cursor: text;
+}
+
+.task-name {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  cursor: pointer;
+  font-weight: 400;
 }
 
 /*---Checkbox---*/
@@ -220,9 +268,10 @@ function submitEdit(task) {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 28px;
-  width: 28px;
+  height: 30px;
+  width: 30px;
   padding: 4px;
+  transition: transform var(--transition-fast);
 
   &:hover {
     transform: scale(1.1);
@@ -236,14 +285,14 @@ function submitEdit(task) {
 .button-icon {
   height: 100%;
   width: 100%;
-  color: $text-dark;
+  color: var(--text-dark);
 }
 
 #undo-icon {
   padding: 2px;
 }
 
-/*---Animations---*/
+/*---Individual item fade animations---*/
 .fade-leave-active {
   transition: all 0.2s ease-in;
 }
@@ -252,10 +301,32 @@ function submitEdit(task) {
   opacity: 0;
 }
 
-.task-name {
-  display: flex;
-  align-items: center;
+/*---Tab slide animations---*/
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
-  cursor: text;
+}
+
+/* Tasks → Completed: new panel comes from right, old exits left */
+.slide-left-enter-from {
+  transform: translateX(100%);
+}
+.slide-left-leave-to {
+  transform: translateX(-100%);
+}
+
+/* Completed → Tasks: new panel comes from left, old exits right */
+.slide-right-enter-from {
+  transform: translateX(-100%);
+}
+.slide-right-leave-to {
+  transform: translateX(100%);
 }
 </style>
