@@ -6,14 +6,15 @@
     >
       <Icon name="ic:baseline-color-lens" id="theme-icon" />
     </button>
-
-    <div v-if="menuOpen" class="color-schemes-menu">
-      <button id="red"></button>
-      <button id="blue"></button>
-      <button id="green"></button>
-      <button id="pink"></button>
-      <button id="dark"></button>
-    </div>
+    <Transition name="slide-out">
+      <div v-if="menuOpen" class="color-schemes-menu">
+        <button id="red"></button>
+        <button id="blue"></button>
+        <button id="green"></button>
+        <button id="pink"></button>
+        <button id="dark"></button>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -42,6 +43,8 @@ const menuOpen = ref(false)
   font-weight: 400;
   color: $text-dark;
   cursor: pointer;
+  z-index: 3;
+  position: relative;
   transition:
     background-color var(--transition-fast),
     font-weight var(--transition-mid);
@@ -63,6 +66,7 @@ const menuOpen = ref(false)
   align-items: center;
   gap: 0.3em;
   padding: 6px;
+  z-index: 1;
 
   button {
     width: 20px;
@@ -112,5 +116,33 @@ const menuOpen = ref(false)
       filter: brightness(1.2);
     }
   }
+}
+
+/* Slide out from behind the list edge */
+.slide-out-enter-active,
+.slide-out-leave-active {
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+}
+
+.slide-out-enter-from {
+  transform: translateX(-50px);
+  opacity: 0.8;
+}
+
+.slide-out-enter-to {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.slide-out-leave-from {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.slide-out-leave-to {
+  transform: translateX(-50px);
+  opacity: 0.8;
 }
 </style>

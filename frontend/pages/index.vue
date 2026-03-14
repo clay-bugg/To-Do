@@ -2,11 +2,13 @@
   <div class="page">
     <div class="app">
       <Header />
-      <div class="todo-list container">
+      <div class="list-wrapper">
+        <div class="todo-list container">
+          <MenuButtons />
+          <NewTaskInput />
+          <TaskList />
+        </div>
         <ColorPicker />
-        <MenuButtons />
-        <NewTaskInput />
-        <TaskList />
       </div>
     </div>
   </div>
@@ -45,8 +47,13 @@ watch(
   background-color: $white;
 }
 
+.list-wrapper {
+  position: relative;
+}
+
 .todo-list {
   position: relative;
+  z-index: 2;
   height: 700px;
   width: 550px;
   display: flex;

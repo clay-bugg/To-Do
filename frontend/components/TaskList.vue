@@ -160,6 +160,7 @@ function submitEdit(task) {
   box-shadow: $shadow-inset;
   border: $border-std;
   overflow: hidden;
+  z-index: 4;
 }
 
 /*---Slide Viewport (clips the sliding panels)---*/
@@ -168,6 +169,7 @@ function submitEdit(task) {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  z-index: 3;
 }
 
 .slide-panel {
