@@ -3,6 +3,7 @@
     <div class="app">
       <Header />
       <div class="todo-list container">
+        <ColorPicker />
         <MenuButtons />
         <NewTaskInput />
         <TaskList />
@@ -12,22 +13,22 @@
 </template>
 
 <script setup>
-const { fetchTasks } = useTaskStore();
-const user = useSupabaseUser();
+const { fetchTasks } = useTaskStore()
+const user = useSupabaseUser()
 
 watch(
   user,
   (u, prevU) => {
-    const hadUser = prevU?.id || prevU?.sub;
-    const hasUser = u?.id || u?.sub;
-    if (hasUser && !hadUser) fetchTasks();
+    const hadUser = prevU?.id || prevU?.sub
+    const hasUser = u?.id || u?.sub
+    if (hasUser && !hadUser) fetchTasks()
   },
-  { immediate: true },
-);
+  { immediate: true }
+)
 </script>
 
 <style scoped lang="scss">
-@use "@/assets/css/variables" as *;
+@use '@/assets/css/variables' as *;
 
 .page {
   width: 100vw;
@@ -45,6 +46,7 @@ watch(
 }
 
 .todo-list {
+  position: relative;
   height: 700px;
   width: 550px;
   display: flex;
@@ -53,10 +55,13 @@ watch(
   gap: 16px;
   border-radius: $radius-lg;
   padding: 35px;
+  padding-top: 45px;
   background-color: $off-white;
   margin: 0 auto;
   border: $border-std;
   box-shadow: $shadow-inset;
   margin-bottom: 20px;
 }
+
+
 </style>

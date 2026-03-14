@@ -1,9 +1,11 @@
 <template>
   <header class="container">
     <p v-if="user">Logged in as {{ user.email }}</p>
-    <button @click="handleLogout" class="logout-button">
-      Logout
-    </button>
+    <div class="header-buttons">
+      <button @click="handleLogout" class="logout-button">
+        Logout
+      </button>
+    </div>
   </header>
 </template>
 
@@ -30,19 +32,28 @@ header {
   padding: 0 60px;
   z-index: 1;
 
+  .header-buttons {
+    display: flex;
+    gap: 0.3em;
+  }
+
   p {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: $text-mid;
   }
 }
 
-.logout-button {
-  width: 100px;
-  height: 40px;
+.color-schemes-button {
+  width: 2.2em;
+  height: 2.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: $radius-sm;
   border: $border-std;
   background-color: $white;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 400;
   color: $text-dark;
   cursor: pointer;
@@ -50,5 +61,30 @@ header {
   transition:
     background-color var(--transition-fast),
     font-weight var(--transition-mid);
+  padding: 0.5em;
+
+  #theme-icon {
+    width: 100%;
+    height: 100%;
+  }
+}
+.logout-button {
+  width: 5em;
+  height: 2.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: $radius-sm;
+  border: $border-std;
+  background-color: $white;
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: $text-dark;
+  cursor: pointer;
+  box-shadow: $shadow-inset;
+  transition:
+    background-color var(--transition-fast),
+    font-weight var(--transition-mid);
+  padding: 1em;
 }
 </style>

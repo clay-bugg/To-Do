@@ -34,7 +34,7 @@ const { selectedListType } = storeToRefs(useTaskStore())
 
   button {
     flex: 1;
-    height: 34px;
+    height: 38px;
     background-color: $white;
     border: $border-std;
     border-radius: 7px;
