@@ -15,22 +15,22 @@
 </template>
 
 <script setup>
-const { fetchTasks } = useTaskStore()
-const user = useSupabaseUser()
+const { fetchTasks } = useTaskStore();
+const user = useSupabaseUser();
 
 watch(
   user,
   (u, prevU) => {
-    const hadUser = prevU?.id || prevU?.sub
-    const hasUser = u?.id || u?.sub
-    if (hasUser && !hadUser) fetchTasks()
+    const hadUser = prevU?.id || prevU?.sub;
+    const hasUser = u?.id || u?.sub;
+    if (hasUser && !hadUser) fetchTasks();
   },
-  { immediate: true }
+  { immediate: true },
 )
 </script>
 
 <style scoped lang="scss">
-@use '@/assets/css/variables' as *;
+@use "@/assets/css/variables" as *;
 
 .page {
   width: 100vw;
@@ -69,6 +69,4 @@ watch(
   box-shadow: $shadow-inset;
   margin-bottom: 20px;
 }
-
-
 </style>

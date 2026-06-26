@@ -19,7 +19,10 @@ export const useTaskStore = defineStore("task", () => {
   async function fetchTasks() {
     const user = useSupabaseUser();
     const userId = user.value?.id ?? user.value?.sub;
-    console.log("[Supabase] fetchTasks called | userId:", userId ?? "NOT LOGGED IN");
+    console.log(
+      "[Supabase] fetchTasks called | userId:",
+      userId ?? "NOT LOGGED IN",
+    );
     if (!userId) return;
 
     const { data, error } = await supabase
@@ -32,7 +35,10 @@ export const useTaskStore = defineStore("task", () => {
       console.error("[Supabase] fetchTasks ERROR:", error);
       return;
     }
-    console.log(`[Supabase] fetchTasks OK | ${data.length} task(s) loaded:`, data);
+    console.log(
+      `[Supabase] fetchTasks OK | ${data.length} task(s) loaded:`,
+      data,
+    );
     tasks.value = data;
   }
 
@@ -40,7 +46,12 @@ export const useTaskStore = defineStore("task", () => {
   async function addTask(taskName) {
     const user = useSupabaseUser();
     const userId = user.value?.id ?? user.value?.sub;
-    console.log("[Supabase] addTask called | userId:", userId ?? "NOT LOGGED IN", "| name:", taskName);
+    console.log(
+      "[Supabase] addTask called | userId:",
+      userId ?? "NOT LOGGED IN",
+      "| name:",
+      taskName,
+    );
     if (!userId) return;
 
     // 1. Create a temporary ID for the update
@@ -50,6 +61,7 @@ export const useTaskStore = defineStore("task", () => {
       name: taskName,
       completed: false,
       user_id: userId,
+      created_at: new Date().toISOString(),
     };
 
     // 2. Update UI immediately
@@ -60,6 +72,7 @@ export const useTaskStore = defineStore("task", () => {
       name: taskName,
       completed: false,
       user_id: userId,
+      created_at: new Date().toISOString(),
     };
 
     const { data, error } = await supabase
@@ -85,7 +98,12 @@ export const useTaskStore = defineStore("task", () => {
 
   //---Update Task---//
   async function updateTask(id, changes) {
-    console.log("[Supabase] updateTask called | id:", id, "| changes:", changes);
+    console.log(
+      "[Supabase] updateTask called | id:",
+      id,
+      "| changes:",
+      changes,
+    );
     // Optimistic update
     const task = tasks.value.find((t) => t.id === id);
     if (task) Object.assign(task, changes);
