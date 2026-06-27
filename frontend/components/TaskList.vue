@@ -12,6 +12,12 @@
               v-for="task in activeTasks"
               :key="task.id"
               class="list-item-box container"
+              :class="{ dragging: draggedTaskId === task.id }"
+              draggable="true"
+              @dragstart="startDrag($event, task)"
+              @dragover.prevent
+              @drop="dropOnTask(task)"
+              @dragend="endDrag"
             >
               <div class="list-item">
                 <input
@@ -112,9 +118,50 @@
 </template>
 
 <script setup>
-const { activeTasks, completedTasks, selectedListType } =
-  storeToRefs(useTaskStore())
-const { updateTask, deleteTask } = useTaskStore()
+const taskStore = useTaskStore()
+
+const {
+  tasks,
+  activeTasks,
+  completedTasks,
+  selectedListType
+} = storeToRefs(taskStore)
+
+const { updateTask, deleteTask } = taskStore
+
+const draggedTaskId = ref(null)
+
+function startDrag(event, task) {
+  draggedTaskId.value = task.id
+  event.dataTransfer.effectAllowed = 'move'
+  event.dataTransfer.setData('text/plain', String(task.id))
+}
+
+function dropOnTask(targetTask) {
+  if (!draggedTaskId.value || draggedTaskId.value === targetTask.id) return
+
+  const draggedIndex = tasks.value.findIndex(
+    task => task.id === draggedTaskId.value
+  )
+
+  if (draggedIndex === -1) return
+
+  const [draggedTask] = tasks.value.splice(draggedIndex, 1)
+
+  const targetIndex = tasks.value.findIndex(
+    task => task.id === targetTask.id
+  )
+
+  if (targetIndex === -1) return
+
+  tasks.value.splice(targetIndex, 0, draggedTask)
+
+  draggedTaskId.value = null
+}
+
+function endDrag() {
+  draggedTaskId.value = null
+}
 
 const editingId = ref(null)
 const editedName = ref('')
@@ -292,6 +339,10 @@ function submitEdit(task) {
 
 #undo-icon {
   padding: 2px;
+}
+
+.dragging {
+  opacity: 0.4;
 }
 
 /*---Individual item fade animations---*/
