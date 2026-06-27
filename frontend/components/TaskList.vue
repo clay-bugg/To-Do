@@ -12,11 +12,16 @@
               v-for="task in activeTasks"
               :key="task.id"
               class="list-item-box container"
-              :class="{ dragging: draggedTaskId === task.id }"
+              :class="{
+                 dragging: draggedTaskId === task.id,
+                'drag-over': dragOverTaskId == task.id
+               }"
               draggable="true"
               @dragstart="startDrag($event, task)"
+              @dragenter="dragOverTaskId = task.id"
               @dragover.prevent
-              @drop="dropOnTask(task)"
+              @dragleave="dragOverTaskId = null"
+              @drop.prevent="dropOnTask(task)"
               @dragend="endDrag"
             >
               <div class="list-item">
@@ -130,15 +135,20 @@ const {
 const { updateTask, deleteTask } = taskStore
 
 const draggedTaskId = ref(null)
+const dragOverTaskId = ref(null)
 
 function startDrag(event, task) {
   draggedTaskId.value = task.id
+
   event.dataTransfer.effectAllowed = 'move'
   event.dataTransfer.setData('text/plain', String(task.id))
 }
 
 function dropOnTask(targetTask) {
-  if (!draggedTaskId.value || draggedTaskId.value === targetTask.id) return
+  if (!draggedTaskId.value || draggedTaskId.value === targetTask.id) {
+    dragOverTaskId.value = null
+    return
+  }
 
   const draggedIndex = tasks.value.findIndex(
     task => task.id === draggedTaskId.value
@@ -157,10 +167,12 @@ function dropOnTask(targetTask) {
   tasks.value.splice(targetIndex, 0, draggedTask)
 
   draggedTaskId.value = null
+  dragOverTaskId.value = null
 }
 
 function endDrag() {
   draggedTaskId.value = null
+  dragOverTaskId.value = null
 }
 
 const editingId = ref(null)
@@ -248,6 +260,40 @@ function submitEdit(task) {
   padding: 0 15px;
   box-shadow: $shadow-inset;
   border: $border-std;
+    transition:
+    transform 0.18s ease,
+    opacity 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+
+  &:hover {
+    cursor: pointer;
+    backdrop-filter: brightnes(95%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list-item-box {
+    transition: none;
+  }
+
+  .dragging,
+  .drag-over {
+    transform: none;
+  }
+  }
+
+.drag-over::before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: -4px;
+  height: 3px;
+  border-radius: 999px;
+  background-color: var(--text-dark);
 }
 
 .list-item {
@@ -339,10 +385,6 @@ function submitEdit(task) {
 
 #undo-icon {
   padding: 2px;
-}
-
-.dragging {
-  opacity: 0.4;
 }
 
 /*---Individual item fade animations---*/
